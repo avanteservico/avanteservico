@@ -1,0 +1,22 @@
+# Credentials and Config
+app/Config/config.php
+
+# PHP & Framework
+/vendor/
+*.log
+tmp/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE & AI metadata
+.gemini/
+.idea/
+.vscode/
+
+# Local backups/misc
+reproduction.php
+fix_migration.php
+*.bak
+*.tmp

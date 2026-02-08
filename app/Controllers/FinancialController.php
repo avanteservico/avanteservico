@@ -1,0 +1,53 @@
+<?php
+
+require_once '../app/Models/Revenue.php';
+require_once '../app/Models/Material.php';
+require_once '../app/Models/PersonPayment.php';
+require_once '../app/Models/Work.php';
+require_once '../app/Helpers/AuthHelper.php';
+
+class FinancialController
+{
+    public function __construct()
+    {
+        AuthHelper::requireLogin();
+    }
+
+    public function index()
+    {
+        if (!AuthHelper::hasPermission('financial', 'list')) {
+            die('Acesso negado. Você não tem permissão para acessar o painel financeiro.');
+        }
+        $work_id = $_GET['work_id'] ?? null;
+        if (!$work_id) {
+            header('Location: ' . BASE_URL . '/works');
+            exit;
+        }
+
+        $workModel = new Work();
+        $work = $workModel->findById($work_id);
+        if (!$work) {
+            header('Location: ' . BASE_URL . '/works');
+            exit;
+        }
+
+        $revenueModel = new Revenue();
+        $materialModel = new Material();
+        $paymentModel = new PersonPayment();
+
+        $revenueSummary = $revenueModel->getSummaryByWorkId($work_id);
+        $materialSummary = $materialModel->getSummaryByWorkId($work_id);
+        $paymentSummary = $paymentModel->getSummaryByWorkId($work_id);
+
+        // Calcular totais gerais
+        $totalIncomes = ($revenueSummary['total_received'] ?? 0) + ($revenueSummary['total_to_receive'] ?? 0);
+        $totalExpenses = ($materialSummary['total_paid'] ?? 0) + ($materialSummary['total_pending'] ?? 0) +
+            ($paymentSummary['total_paid'] ?? 0) + ($paymentSummary['total_pending'] ?? 0);
+
+        $balance = $totalIncomes - $totalExpenses;
+
+        require_once '../app/Views/templates/header.php';
+        require_once '../app/Views/financial/index.php';
+        require_once '../app/Views/templates/footer.php';
+    }
+}
