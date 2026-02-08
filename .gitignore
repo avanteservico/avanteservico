@@ -1,5 +1,6 @@
 # Credentials and Config
 app/Config/config.php
+.env
 
 # PHP & Framework
 /vendor/

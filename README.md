@@ -42,14 +42,13 @@ cd avante_servico
    ```bash
    mysql -u seu_usuario -p nome_do_banco < database.sql
    ```
-   Alteraç
 
 ### 3. Configure a aplicação
-1. Copie o arquivo de configuração:
+1. Copie o arquivo de exemplo:
    ```bash
-   cp app/Config/config.example.php app/Config/config.php
+   cp .env.example .env
    ```
-2. Edite `app/Config/config.php` com suas credenciais do banco de dados
+2. Edite `.env` com suas credenciais do banco de dados
 
 ### 4. Configure o servidor web
 - Se estiver usando XAMPP, coloque o projeto na pasta `htdocs`
@@ -73,6 +72,18 @@ avante_servico/
 ## 👤 Acesso ao Sistema
 
 Após a instalação, você pode criar um usuário administrador diretamente no banco de dados ou através da interface de cadastro.
+
+## 🚀 Deploy em Produção
+
+Para colocar o projeto online, consulte o guia completo de deploy:
+
+📖 **[Guia de Deploy no Railway](DEPLOY.md)**
+
+O guia inclui:
+- Passo a passo detalhado com imagens
+- Configuração de banco de dados
+- Variáveis de ambiente
+- Solução de problemas comuns
 
 ## 🤝 Contribuindo
 
