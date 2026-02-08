@@ -42,6 +42,7 @@ cd avante_servico
    ```bash
    mysql -u seu_usuario -p nome_do_banco < database.sql
    ```
+   Alteraç
 
 ### 3. Configure a aplicação
 1. Copie o arquivo de configuração:
