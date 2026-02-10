@@ -38,6 +38,11 @@ class MaterialController
 
         $works = $workModel->getAll();
 
+        // Load expense types
+        require_once '../app/Models/ExpenseType.php';
+        $expenseTypeModel = new ExpenseType();
+        $expenseTypes = $expenseTypeModel->getAll();
+
         require_once '../app/Views/templates/header.php';
         require_once '../app/Views/materials/index.php';
         require_once '../app/Views/templates/footer.php';
@@ -62,9 +67,18 @@ class MaterialController
             $materialModel = new Material();
             $work_id = $_POST['work_id'];
 
+            // Handle new expense type creation
+            $expense_type_id = $_POST['expense_type_id'] ?? 1;
+            if ($expense_type_id === 'new' && !empty($_POST['new_expense_type'])) {
+                require_once '../app/Models/ExpenseType.php';
+                $expenseTypeModel = new ExpenseType();
+                $expense_type_id = $expenseTypeModel->create(trim($_POST['new_expense_type']));
+            }
+
             $data = [
                 'work_id' => $work_id,
                 'name' => $_POST['name'],
+                'expense_type_id' => $expense_type_id,
                 'amount' => $this->parseCurrency($_POST['amount']),
                 'purchase_date' => $_POST['purchase_date'],
                 'is_paid' => isset($_POST['is_paid'])
@@ -91,10 +105,19 @@ class MaterialController
             $id = $_POST['id'];
             $work_id = $_POST['work_id'] ?? null;
 
+            // Handle new expense type creation
+            $expense_type_id = $_POST['expense_type_id'] ?? 1;
+            if ($expense_type_id === 'new' && !empty($_POST['new_expense_type'])) {
+                require_once '../app/Models/ExpenseType.php';
+                $expenseTypeModel = new ExpenseType();
+                $expense_type_id = $expenseTypeModel->create(trim($_POST['new_expense_type']));
+            }
+
             $data = [
                 'id' => $id,
                 'work_id' => $work_id,
                 'name' => $_POST['name'],
+                'expense_type_id' => $expense_type_id,
                 'amount' => $this->parseCurrency($_POST['amount']),
                 'purchase_date' => $_POST['purchase_date'],
                 'is_paid' => isset($_POST['is_paid'])

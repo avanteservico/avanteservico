@@ -31,12 +31,20 @@
                 <?= $summary['total_works'] ?? 0 ?>
             </div>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 col-span-2 md:col-span-2">
-            <div class="text-gray-400 text-xs font-medium uppercase tracking-wider mb-1">Valor em Carteira</div>
-            <div class="text-2xl font-bold text-primary">R$
-                <?= number_format($summary['total_value'] ?? 0, 2, ',', '.') ?>
+        <a href="<?= BASE_URL ?>/financial/revenues"
+            class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
+            <div class="text-gray-400 text-xs font-medium uppercase tracking-wider mb-1">Total em Receitas</div>
+            <div class="text-2xl font-bold text-green-600">+ R$
+                <?= number_format($financialData['receitas'] ?? 0, 2, ',', '.') ?>
             </div>
-        </div>
+        </a>
+        <a href="<?= BASE_URL ?>/financial/expenses"
+            class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
+            <div class="text-gray-400 text-xs font-medium uppercase tracking-wider mb-1">Despesas</div>
+            <div class="text-2xl font-bold text-red-600">- R$
+                <?= number_format($financialData['despesas'] ?? 0, 2, ',', '.') ?>
+            </div>
+        </a>
     </div>
 
     <!-- Recent Works List -->

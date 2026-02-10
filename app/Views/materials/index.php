@@ -56,6 +56,8 @@
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Descrição / Material</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tipo</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Data Compra</th>
                             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -78,6 +80,9 @@
                                             <?= htmlspecialchars($material['work_name'] ?? 'Sem Obra') ?>
                                         </div>
                                     <?php endif; ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <?= htmlspecialchars($material['expense_type_name'] ?? 'Diversas') ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                     <?= date('d/m/Y', strtotime($material['purchase_date'])) ?>
@@ -134,6 +139,23 @@
                                 placeholder="Ex: Cimento, Areia, Tijolos">
                         </div>
                         <div>
+                            <label class="block text-sm font-medium text-gray-700">Tipo de Despesa</label>
+                            <select name="expense_type_id" id="expense_type_id" required
+                                onchange="toggleNewExpenseType()"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                <?php foreach ($expenseTypes as $type): ?>
+                                    <option value="<?= $type['id'] ?>"><?= htmlspecialchars($type['name']) ?></option>
+                                <?php endforeach; ?>
+                                <option value="new">➕ Novo Tipo de Despesa</option>
+                            </select>
+                        </div>
+                        <div id="new_expense_type_container" style="display: none;">
+                            <label class="block text-sm font-medium text-gray-700">Nome do Novo Tipo</label>
+                            <input type="text" name="new_expense_type" id="new_expense_type"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
+                                placeholder="Ex: Mão de Obra, Transporte">
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700">Valor (R$)</label>
                             <input type="text" name="amount" id="material_amount" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 mask-money">
@@ -165,6 +187,21 @@
 </div>
 
 <script>
+    function toggleNewExpenseType() {
+        const select = document.getElementById('expense_type_id');
+        const container = document.getElementById('new_expense_type_container');
+        const input = document.getElementById('new_expense_type');
+
+        if (select.value === 'new') {
+            container.style.display = 'block';
+            input.required = true;
+        } else {
+            container.style.display = 'none';
+            input.required = false;
+            input.value = '';
+        }
+    }
+
     function openMaterialModal() {
         document.getElementById('modal-material').classList.remove('hidden');
         document.getElementById('form-material').action = '<?= BASE_URL ?>/materials/create';
@@ -172,7 +209,9 @@
         document.getElementById('material_id').value = '';
         document.getElementById('material_name').value = '';
         document.getElementById('material_amount').value = '';
+        document.getElementById('expense_type_id').value = '1';
         document.getElementById('is_paid_material').checked = false;
+        toggleNewExpenseType();
     }
 
     function closeMaterialModal() {
@@ -187,7 +226,9 @@
         document.getElementById('material_id').value = material.id;
         document.getElementById('material_name').value = material.name;
         document.getElementById('material_purchase_date').value = material.purchase_date;
+        document.getElementById('expense_type_id').value = material.expense_type_id || '1';
         document.getElementById('is_paid_material').checked = (material.is_paid == 1);
+        toggleNewExpenseType();
 
         const amount = parseFloat(material.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
         document.getElementById('material_amount').value = amount;

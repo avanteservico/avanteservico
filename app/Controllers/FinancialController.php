@@ -50,4 +50,34 @@ class FinancialController
         require_once '../app/Views/financial/index.php';
         require_once '../app/Views/templates/footer.php';
     }
+
+    public function revenues()
+    {
+        if (!AuthHelper::hasPermission('revenues', 'list')) {
+            die('Acesso negado. Você não tem permissão para listar receitas.');
+        }
+
+        $revenueModel = new Revenue();
+        $revenues = $revenueModel->getAll();
+        $summary = $revenueModel->getGlobalSummary();
+
+        require_once '../app/Views/templates/header.php';
+        require_once '../app/Views/financial/revenues.php';
+        require_once '../app/Views/templates/footer.php';
+    }
+
+    public function expenses()
+    {
+        if (!AuthHelper::hasPermission('materials', 'list')) {
+            die('Acesso negado. Você não tem permissão para listar despesas.');
+        }
+
+        $materialModel = new Material();
+        $expenses = $materialModel->getAll();
+        $summary = $materialModel->getGlobalSummary();
+
+        require_once '../app/Views/templates/header.php';
+        require_once '../app/Views/financial/expenses.php';
+        require_once '../app/Views/templates/footer.php';
+    }
 }

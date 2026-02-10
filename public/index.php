@@ -49,7 +49,8 @@ $routes = [
     'materials' => 'MaterialController',
     'revenues' => 'RevenueController',
     'sub_services' => 'ServiceController', // Talvez precise de controller próprio ou não
-    'setup' => 'AuthController' // Opcional
+    'setup' => 'AuthController', // Opcional
+    'financial' => 'FinancialController'
 ];
 
 // Determinar o nome do Controller

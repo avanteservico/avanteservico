@@ -17,11 +17,20 @@ class DashboardController
         $works = $workModel->getAll();
         $summary = $workModel->getSummary();
 
-        // Dados Mockados para o Gráfico (enquanto não temos query complexa de financeiro)
+        // Calcular dados financeiros reais
+        require_once '../app/Models/Revenue.php';
+        require_once '../app/Models/Material.php';
+
+        $revenueModel = new Revenue();
+        $materialModel = new Material();
+
+        $revenueSummary = $revenueModel->getGlobalSummary();
+        $expenseSummary = $materialModel->getGlobalSummary();
+
         $financialData = [
-            'receitas' => 0, // Implementar query real
-            'despesas' => 0, // Implementar query real
-            'status' => 'Neutro'
+            'receitas' => ($revenueSummary['total_received'] ?? 0) + ($revenueSummary['total_to_receive'] ?? 0),
+            'despesas' => ($expenseSummary['total_paid'] ?? 0) + ($expenseSummary['total_pending'] ?? 0),
+            'status' => 'Calculado'
         ];
 
         require_once '../app/Views/templates/header.php';
