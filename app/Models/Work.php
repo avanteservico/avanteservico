@@ -21,6 +21,14 @@ class Work
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getAllActive()
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE status = 'active' ORDER BY name ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getSummary()
     {
         $query = "SELECT 
@@ -99,5 +107,35 @@ class Work
             return true;
         }
         return false;
+    }
+
+    public function getSuppliers($work_id)
+    {
+        $query = "SELECT s.* FROM suppliers s
+                  JOIN work_suppliers ws ON s.id = ws.supplier_id
+                  WHERE ws.work_id = :work_id
+                  ORDER BY s.name ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':work_id', $work_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function addSupplier($work_id, $supplier_id)
+    {
+        $query = "INSERT IGNORE INTO work_suppliers (work_id, supplier_id) VALUES (:work_id, :supplier_id)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':work_id', $work_id);
+        $stmt->bindParam(':supplier_id', $supplier_id);
+        return $stmt->execute();
+    }
+
+    public function removeSupplier($work_id, $supplier_id)
+    {
+        $query = "DELETE FROM work_suppliers WHERE work_id = :work_id AND supplier_id = :supplier_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':work_id', $work_id);
+        $stmt->bindParam(':supplier_id', $supplier_id);
+        return $stmt->execute();
     }
 }

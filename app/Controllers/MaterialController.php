@@ -43,6 +43,11 @@ class MaterialController
         $expenseTypeModel = new ExpenseType();
         $expenseTypes = $expenseTypeModel->getAll();
 
+        // Load suppliers
+        require_once '../app/Models/Supplier.php';
+        $supplierModel = new Supplier();
+        $suppliers = $supplierModel->getAll();
+
         require_once '../app/Views/templates/header.php';
         require_once '../app/Views/materials/index.php';
         require_once '../app/Views/templates/footer.php';
@@ -65,7 +70,7 @@ class MaterialController
         }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $materialModel = new Material();
-            $work_id = $_POST['work_id'];
+            $work_id = !empty($_POST['work_id']) ? $_POST['work_id'] : null;
 
             // Handle new expense type creation
             $expense_type_id = $_POST['expense_type_id'] ?? 1;
@@ -79,6 +84,7 @@ class MaterialController
                 'work_id' => $work_id,
                 'name' => $_POST['name'],
                 'expense_type_id' => $expense_type_id,
+                'supplier_id' => $_POST['supplier_id'] ?? 1,
                 'amount' => $this->parseCurrency($_POST['amount']),
                 'purchase_date' => $_POST['purchase_date'],
                 'is_paid' => isset($_POST['is_paid'])
@@ -118,6 +124,7 @@ class MaterialController
                 'work_id' => $work_id,
                 'name' => $_POST['name'],
                 'expense_type_id' => $expense_type_id,
+                'supplier_id' => $_POST['supplier_id'] ?? 1,
                 'amount' => $this->parseCurrency($_POST['amount']),
                 'purchase_date' => $_POST['purchase_date'],
                 'is_paid' => isset($_POST['is_paid'])

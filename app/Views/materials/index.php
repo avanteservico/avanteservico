@@ -57,6 +57,8 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Descrição / Material</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Fornecedor</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Tipo</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Data Compra</th>
@@ -80,6 +82,9 @@
                                             <?= htmlspecialchars($material['work_name'] ?? 'Sem Obra') ?>
                                         </div>
                                     <?php endif; ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <?= htmlspecialchars($material['supplier_name'] ?? 'Padrão') ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                     <?= htmlspecialchars($material['expense_type_name'] ?? 'Diversas') ?>
@@ -138,6 +143,21 @@
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
                                 placeholder="Ex: Cimento, Areia, Tijolos">
                         </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Fornecedor</label>
+                            <select name="supplier_id" id="supplier_id" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                <?php foreach ($suppliers as $supplier): ?>
+                                    <option value="<?= $supplier['id'] ?>"><?= htmlspecialchars($supplier['name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="text-xs text-right mt-1"><a href="<?= BASE_URL ?>/suppliers/create"
+                                    class="text-primary hover:underline" target="_blank">Cadastrar novo fornecedor</a>
+                            </p>
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Tipo de Despesa</label>
                             <select name="expense_type_id" id="expense_type_id" required
@@ -209,6 +229,7 @@
         document.getElementById('material_id').value = '';
         document.getElementById('material_name').value = '';
         document.getElementById('material_amount').value = '';
+        document.getElementById('supplier_id').value = '1';
         document.getElementById('expense_type_id').value = '1';
         document.getElementById('is_paid_material').checked = false;
         toggleNewExpenseType();
@@ -226,6 +247,7 @@
         document.getElementById('material_id').value = material.id;
         document.getElementById('material_name').value = material.name;
         document.getElementById('material_purchase_date').value = material.purchase_date;
+        document.getElementById('supplier_id').value = material.supplier_id || '1';
         document.getElementById('expense_type_id').value = material.expense_type_id || '1';
         document.getElementById('is_paid_material').checked = (material.is_paid == 1);
         toggleNewExpenseType();

@@ -15,10 +15,11 @@ class Material
 
     public function getAll()
     {
-        $query = "SELECT m.*, w.name as work_name, et.name as expense_type_name 
+        $query = "SELECT m.*, w.name as work_name, et.name as expense_type_name, s.name as supplier_name 
                   FROM " . $this->table_name . " m 
                   LEFT JOIN works w ON m.work_id = w.id 
                   LEFT JOIN expense_types et ON m.expense_type_id = et.id
+                  LEFT JOIN suppliers s ON m.supplier_id = s.id
                   ORDER BY m.purchase_date DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -27,9 +28,10 @@ class Material
 
     public function getAllByWorkId($work_id)
     {
-        $query = "SELECT m.*, et.name as expense_type_name 
+        $query = "SELECT m.*, et.name as expense_type_name, s.name as supplier_name 
                   FROM " . $this->table_name . " m 
                   LEFT JOIN expense_types et ON m.expense_type_id = et.id
+                  LEFT JOIN suppliers s ON m.supplier_id = s.id
                   WHERE m.work_id = :work_id 
                   ORDER BY m.purchase_date DESC";
         $stmt = $this->conn->prepare($query);
@@ -41,18 +43,20 @@ class Material
     public function create($data)
     {
         $query = "INSERT INTO " . $this->table_name . " 
-            (work_id, name, expense_type_id, amount, purchase_date, is_paid) 
+            (work_id, name, expense_type_id, supplier_id, amount, purchase_date, is_paid) 
             VALUES 
-            (:work_id, :name, :expense_type_id, :amount, :purchase_date, :is_paid)";
+            (:work_id, :name, :expense_type_id, :supplier_id, :amount, :purchase_date, :is_paid)";
 
         $stmt = $this->conn->prepare($query);
 
         $is_paid = isset($data['is_paid']) && $data['is_paid'] ? '1' : '0';
         $expense_type_id = isset($data['expense_type_id']) && $data['expense_type_id'] ? $data['expense_type_id'] : 1;
+        $supplier_id = isset($data['supplier_id']) && $data['supplier_id'] ? $data['supplier_id'] : 1; // Default to 1
 
         $stmt->bindParam(':work_id', $data['work_id']);
         $stmt->bindParam(':name', $data['name']);
         $stmt->bindParam(':expense_type_id', $expense_type_id);
+        $stmt->bindParam(':supplier_id', $supplier_id);
         $stmt->bindParam(':amount', $data['amount']);
         $stmt->bindParam(':purchase_date', $data['purchase_date']);
         $stmt->bindParam(':is_paid', $is_paid, PDO::PARAM_BOOL);
@@ -83,16 +87,18 @@ class Material
     public function update($data)
     {
         $query = "UPDATE " . $this->table_name . " 
-            SET name=:name, expense_type_id=:expense_type_id, amount=:amount, purchase_date=:purchase_date, is_paid=:is_paid, work_id=:work_id 
+            SET name=:name, expense_type_id=:expense_type_id, supplier_id=:supplier_id, amount=:amount, purchase_date=:purchase_date, is_paid=:is_paid, work_id=:work_id 
             WHERE id=:id";
 
         $stmt = $this->conn->prepare($query);
 
         $is_paid = isset($data['is_paid']) && $data['is_paid'] ? '1' : '0';
         $expense_type_id = isset($data['expense_type_id']) && $data['expense_type_id'] ? $data['expense_type_id'] : 1;
+        $supplier_id = isset($data['supplier_id']) && $data['supplier_id'] ? $data['supplier_id'] : 1;
 
         $stmt->bindParam(':name', $data['name']);
         $stmt->bindParam(':expense_type_id', $expense_type_id);
+        $stmt->bindParam(':supplier_id', $supplier_id);
         $stmt->bindParam(':amount', $data['amount']);
         $stmt->bindParam(':purchase_date', $data['purchase_date']);
         $stmt->bindParam(':is_paid', $is_paid, PDO::PARAM_BOOL);

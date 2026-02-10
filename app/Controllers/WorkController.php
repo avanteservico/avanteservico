@@ -149,4 +149,54 @@ class WorkController
             header('Location: ' . BASE_URL . '/works');
         }
     }
+
+    public function suppliers($id)
+    {
+        if (!AuthHelper::hasPermission('works', 'read')) {
+            die('Acesso negado.');
+        }
+
+        $workModel = new Work();
+        $work = $workModel->findById($id);
+
+        if (!$work) {
+            header('Location: ' . BASE_URL . '/works');
+            exit;
+        }
+
+        $linkedSuppliers = $workModel->getSuppliers($id);
+
+        require_once '../app/Models/Supplier.php';
+        $supplierModel = new Supplier();
+        $allSuppliers = $supplierModel->getAll();
+
+        require_once '../app/Views/templates/header.php';
+        require_once '../app/Views/works/suppliers.php';
+        require_once '../app/Views/templates/footer.php';
+    }
+
+    public function addSupplier()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $work_id = $_POST['work_id'];
+            $supplier_id = $_POST['supplier_id'];
+
+            $workModel = new Work();
+            $workModel->addSupplier($work_id, $supplier_id);
+
+            header('Location: ' . BASE_URL . '/works/suppliers/' . $work_id);
+            exit;
+        }
+    }
+
+    public function removeSupplier($work_id)
+    {
+        $supplier_id = $_GET['supplier_id'];
+
+        $workModel = new Work();
+        $workModel->removeSupplier($work_id, $supplier_id);
+
+        header('Location: ' . BASE_URL . '/works/suppliers/' . $work_id);
+        exit;
+    }
 }

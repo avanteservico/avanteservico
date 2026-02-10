@@ -31,20 +31,7 @@
                 <?= $summary['total_works'] ?? 0 ?>
             </div>
         </div>
-        <a href="<?= BASE_URL ?>/financial/revenues"
-            class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
-            <div class="text-gray-400 text-xs font-medium uppercase tracking-wider mb-1">Total em Receitas</div>
-            <div class="text-2xl font-bold text-green-600">+ R$
-                <?= number_format($financialData['receitas'] ?? 0, 2, ',', '.') ?>
-            </div>
-        </a>
-        <a href="<?= BASE_URL ?>/financial/expenses"
-            class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
-            <div class="text-gray-400 text-xs font-medium uppercase tracking-wider mb-1">Despesas</div>
-            <div class="text-2xl font-bold text-red-600">- R$
-                <?= number_format($financialData['despesas'] ?? 0, 2, ',', '.') ?>
-            </div>
-        </a>
+        <!-- Financial cards removed as requested -->
     </div>
 
     <!-- Recent Works List -->
@@ -59,31 +46,41 @@
                 <p class="text-center text-gray-500 py-8">Nenhuma obra cadastrada.</p>
             <?php else: ?>
                 <?php foreach (array_slice($works, 0, 5) as $work): ?>
-                    <a href="<?= BASE_URL ?>/works/show/<?= $work['id'] ?>"
-                        class="block bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-semibold text-gray-900">
-                                    <?= htmlspecialchars($work['name']) ?>
-                                </h3>
-                                <p class="text-xs text-gray-500 mt-1">
-                                    <?= htmlspecialchars($work['address']) ?>
-                                </p>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative">
+                        <a href="<?= BASE_URL ?>/works/show/<?= $work['id'] ?>" class="block">
+                            <div class="flex justify-between items-start">
+                                <div class="pr-10">
+                                    <h3 class="font-semibold text-gray-900 leading-tight">
+                                        <?= htmlspecialchars($work['name']) ?>
+                                    </h3>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        <?= htmlspecialchars($work['address']) ?>
+                                    </p>
+                                </div>
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 shrink-0">
+                                    <?= $work['status'] ?>
+                                </span>
                             </div>
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <?= $work['status'] ?>
-                            </span>
-                        </div>
-                        <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
-                            <span>Início:
-                                <?= date('d/m/Y', strtotime($work['start_date'])) ?>
-                            </span>
-                            <span>Prazo:
-                                <?= date('d/m/Y', strtotime($work['end_date_prediction'])) ?>
-                            </span>
-                        </div>
-                    </a>
+                            <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+                                <span>Início:
+                                    <?= date('d/m/Y', strtotime($work['start_date'])) ?>
+                                </span>
+                                <span>Prazo:
+                                    <?= date('d/m/Y', strtotime($work['end_date_prediction'])) ?>
+                                </span>
+                            </div>
+                        </a>
+                        <a href="<?= BASE_URL ?>/works/edit/<?= $work['id'] ?>"
+                            class="absolute top-4 right-14 text-gray-400 hover:text-primary bg-white rounded-full p-1"
+                            title="Editar Obra">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </a>
+                    </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>

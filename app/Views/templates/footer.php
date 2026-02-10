@@ -25,6 +25,16 @@
                 <span class="text-xs font-medium">Obras</span>
             </a>
 
+            <a href="<?= BASE_URL ?>/suppliers"
+                class="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-primary active:text-primary transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span class="text-xs font-medium">Fornecedores</span>
+            </a>
+
             <div class="relative -top-5">
                 <a href="<?= BASE_URL ?>/tasks"
                     class="flex flex-col items-center justify-center w-14 h-14 rounded-full bg-primary text-white shadow-lg transform active:scale-95 transition-transform duration-200">
