@@ -1,7 +1,20 @@
 <?php
 
-require_once __DIR__ . '/../app/Config/config.php';
-require_once __DIR__ . '/../app/Config/Database.php';
+$configPath = __DIR__ . '/../app/Config/config.php';
+$dbPath = __DIR__ . '/../app/Config/Database.php';
+
+if (!file_exists($configPath)) {
+    echo "<h1>Debug Info</h1>";
+    echo "Current Dir: " . __DIR__ . "<br>";
+    echo "Looking for: " . $configPath . "<br>";
+    echo "Root Files: <pre>";
+    print_r(scandir(__DIR__ . '/..'));
+    echo "</pre>";
+    die("Error: Config file not found.");
+}
+
+require_once $configPath;
+require_once $dbPath;
 
 // Autoload simples
 spl_autoload_register(function ($class_name) {
