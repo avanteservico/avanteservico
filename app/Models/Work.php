@@ -138,4 +138,21 @@ class Work
         $stmt->bindParam(':supplier_id', $supplier_id);
         return $stmt->execute();
     }
+
+    public function getAllSuppliersWithWorks()
+    {
+        $query = "(SELECT s.name as supplier_name, w.name as work_name, s.id as supplier_id, w.id as work_id, 'Vínculo Direto' as type
+                  FROM suppliers s
+                  JOIN work_suppliers ws ON s.id = ws.supplier_id
+                  JOIN works w ON ws.work_id = w.id)
+                  UNION
+                  (SELECT DISTINCT s.name as supplier_name, w.name as work_name, s.id as supplier_id, w.id as work_id, 'Via Despesa' as type
+                  FROM suppliers s
+                  JOIN materials m ON s.id = m.supplier_id
+                  JOIN works w ON m.work_id = w.id)
+                  ORDER BY work_name ASC, supplier_name ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

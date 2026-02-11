@@ -60,7 +60,18 @@
                             </div>
                         </div>
                         <div class="mt-4 md:mt-0 flex items-center space-x-4">
-                            <!-- Link para detalhes do fornecedor (opcional, já tem no nome) -->
+                            <!-- Lançar Despesa -->
+                            <a href="<?= BASE_URL ?>/materials?work_id=<?= $work['id'] ?>&supplier_id=<?= $supplier['id'] ?>&action=new"
+                                class="text-xs font-medium bg-amber-50 text-amber-700 px-3 py-1 rounded-full hover:bg-amber-100 transition-colors flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Lançar Despesa
+                            </a>
+
+                            <!-- Link para detalhes do fornecedor -->
                             <a href="<?= BASE_URL ?>/suppliers/show/<?= $supplier['id'] ?>"
                                 class="text-gray-400 hover:text-primary transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -87,6 +98,91 @@
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
+    </div>
+
+    <!-- Todos os Fornecedores -->
+    <div class="mt-12">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Todos os Fornecedores</h2>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <ul class="divide-y divide-gray-100">
+                <?php
+                // Helper to check if a supplier is already linked
+                $linkedIds = array_column($linkedSuppliers, 'id');
+                foreach ($allSuppliers as $supplier):
+                    $isLinked = in_array($supplier['id'], $linkedIds);
+                    ?>
+                    <li
+                        class="p-6 hover:bg-gray-50 flex flex-col md:flex-row justify-between items-start md:items-center group">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <span
+                                    class="inline-flex items-center justify-center h-10 w-10 rounded-full <?= $isLinked ? 'bg-green-100' : 'bg-gray-100' ?>">
+                                    <svg class="h-6 w-6 <?= $isLinked ? 'text-green-600' : 'text-gray-400' ?>" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-sm font-medium text-gray-900">
+                                    <?= htmlspecialchars($supplier['name']) ?>
+                                </span>
+                                <?php if ($isLinked): ?>
+                                    <span
+                                        class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Vinculado</span>
+                                <?php endif; ?>
+                                <p class="text-sm text-gray-500">
+                                    <?= htmlspecialchars($supplier['phone'] ?? 'Sem telefone') ?>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 md:mt-0 flex items-center space-x-3">
+                            <!-- Lançar Despesa -->
+                            <a href="<?= BASE_URL ?>/materials?work_id=<?= $work['id'] ?>&supplier_id=<?= $supplier['id'] ?>&action=new"
+                                class="text-xs font-medium bg-amber-50 text-amber-700 px-3 py-1 rounded-full hover:bg-amber-100 transition-colors flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Lançar Despesa
+                            </a>
+
+                            <?php if (!$isLinked): ?>
+                                <!-- Formulário rápido para vincular -->
+                                <form action="<?= BASE_URL ?>/works/addSupplier" method="POST" class="inline">
+                                    <input type="hidden" name="work_id" value="<?= $work['id'] ?>">
+                                    <input type="hidden" name="supplier_id" value="<?= $supplier['id'] ?>">
+                                    <button type="submit"
+                                        class="text-xs font-medium bg-blue-50 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-100 transition-colors flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M10.172 13.828a4 4 0 015.656 0l4-4a4 4 0 11-5.656-5.656l-1.102 1.101" />
+                                        </svg>
+                                        Vincular
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+
+                            <a href="<?= BASE_URL ?>/suppliers/show/<?= $supplier['id'] ?>"
+                                class="text-gray-400 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     </div>
 </div>
 

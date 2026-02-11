@@ -132,4 +132,15 @@ class SupplierController
         }
         exit;
     }
+
+    public function linked()
+    {
+        require_once '../app/Models/Work.php';
+        $workModel = new Work();
+        $linkedData = $workModel->getAllSuppliersWithWorks();
+
+        require_once '../app/Views/templates/header.php';
+        require_once '../app/Views/suppliers/linked.php';
+        require_once '../app/Views/templates/footer.php';
+    }
 }

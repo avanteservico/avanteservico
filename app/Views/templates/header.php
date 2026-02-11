@@ -43,6 +43,10 @@
                         <span class="text-primary font-bold text-lg">Avante Serviço</span>
                     </div>
                     <div class="flex items-center space-x-4">
+                        <a href="<?= BASE_URL ?>/suppliers/linked"
+                            class="text-sm font-medium text-gray-500 hover:text-primary transition-colors">
+                            Vínculos
+                        </a>
                         <span class="text-sm text-gray-500 hidden sm:block">
                             <?= htmlspecialchars($_SESSION['user_name']) ?>
                         </span>

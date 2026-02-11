@@ -255,4 +255,20 @@
         const amount = parseFloat(material.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
         document.getElementById('material_amount').value = amount;
     }
+
+    // Auto-open modal if action=new is present and pre-fill supplier if supplier_id is present
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('action') === 'new') {
+            openMaterialModal();
+
+            const supplierId = urlParams.get('supplier_id');
+            if (supplierId) {
+                const supplierSelect = document.getElementById('supplier_id');
+                if (supplierSelect) {
+                    supplierSelect.value = supplierId;
+                }
+            }
+        }
+    });
 </script>
