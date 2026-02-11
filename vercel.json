@@ -6,7 +6,10 @@
     },
     "routes": [
         {
-            "src": "/(css|js|fonts|images|img|assets|favicon.ico|manifest.json|service-worker.js)/(.*)",
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(css|js|fonts|images|img|assets|favicon.ico|manifest.json|service-worker.js|logo.*)/(.*)",
             "dest": "/public/$1/$2"
         },
         {
