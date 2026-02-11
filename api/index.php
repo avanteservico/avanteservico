@@ -1,15 +1,35 @@
 <?php
 
-$configPath = __DIR__ . '/../app/Config/config.php';
-$dbPath = __DIR__ . '/../app/Config/Database.php';
+$baseDir = dirname(__DIR__);
+$configPath = $baseDir . '/app/Config/config.php';
+$dbPath = $baseDir . '/app/Config/Database.php';
 
 if (!file_exists($configPath)) {
     echo "<h1>Debug Info</h1>";
-    echo "Current Dir: " . __DIR__ . "<br>";
-    echo "Looking for: " . $configPath . "<br>";
-    echo "Root Files: <pre>";
-    print_r(scandir(__DIR__ . '/..'));
+    echo "Base Dir: " . $baseDir . "<br>";
+    echo "Config Path: " . $configPath . "<br>";
+
+    echo "Directory Listing of Base Dir:<pre>";
+    print_r(scandir($baseDir));
     echo "</pre>";
+
+    $appDir = $baseDir . '/app';
+    if (is_dir($appDir)) {
+        echo "app Dir Contents:<pre>";
+        print_r(scandir($appDir));
+        echo "</pre>";
+
+        $configDir = $appDir . '/Config';
+        if (is_dir($configDir)) {
+            echo "app/Config Dir Contents:<pre>";
+            print_r(scandir($configDir));
+            echo "</pre>";
+        } else {
+            echo "app/Config directory NOT FOUND.<br>";
+        }
+    } else {
+        echo "app directory NOT FOUND.<br>";
+    }
     die("Error: Config file not found.");
 }
 
@@ -17,12 +37,12 @@ require_once $configPath;
 require_once $dbPath;
 
 // Autoload simples
-spl_autoload_register(function ($class_name) {
+spl_autoload_register(function ($class_name) use ($baseDir) {
     $directories = [
-        __DIR__ . '/../app/Controllers/',
-        __DIR__ . '/../app/Models/',
-        __DIR__ . '/../app/Helpers/',
-        __DIR__ . '/../app/Config/'
+        $baseDir . '/app/Controllers/',
+        $baseDir . '/app/Models/',
+        $baseDir . '/app/Helpers/',
+        $baseDir . '/app/Config/'
     ];
 
     foreach ($directories as $directory) {
@@ -84,7 +104,7 @@ if (array_key_exists($controllerUri, $routes)) {
     $controllerName = ucfirst($controllerUri) . 'Controller';
 }
 
-if (file_exists(__DIR__ . '/../app/Controllers/' . $controllerName . '.php')) {
+if (file_exists($baseDir . '/app/Controllers/' . $controllerName . '.php')) {
     $controller = new $controllerName;
     if (method_exists($controller, $method)) {
         call_user_func_array([$controller, $method], $params);
@@ -93,7 +113,7 @@ if (file_exists(__DIR__ . '/../app/Controllers/' . $controllerName . '.php')) {
     }
 } else {
     if ($controllerUri == 'login') {
-        require_once __DIR__ . '/../app/Controllers/AuthController.php';
+        require_once $baseDir . '/app/Controllers/AuthController.php';
         $auth = new AuthController();
         $auth->login();
     } else {
