@@ -1,1 +1,8 @@
-{}
+{
+    "name": "avante/servico",
+    "description": "Sistema de Gestão de Obras",
+    "type": "project",
+    "require": {
+        "php": ">=8.1"
+    }
+}

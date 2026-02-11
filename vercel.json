@@ -1,13 +1,10 @@
 {
     "functions": {
         "api/*.php": {
-            "runtime": "vercel-php@0.6.0"
+            "runtime": "vercel-php@0.7.0"
         }
     },
     "routes": [
-        {
-            "handle": "filesystem"
-        },
         {
             "src": "/(css|js|fonts|images|img|assets|favicon.ico|manifest.json|service-worker.js|logo.*)/(.*)",
             "dest": "/public/$1/$2"
