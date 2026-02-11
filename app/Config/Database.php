@@ -19,11 +19,16 @@ class Database
 
         if ($isSupabase && strpos($username, '.') === false) {
             // Só anexar o ID do projeto se estivermos usando o Pooler (Porta 6543)
-            // Conexões diretas (5432) não aceitam o sufixo no usuário.
             if ($this->port == '6543' || strpos($this->host, 'pooler.supabase.com') !== false) {
-                preg_match('/([a-z0-9]{20})/', $this->host, $matches);
-                if (!empty($matches[1])) {
-                    $username .= '.' . $matches[1];
+                $projectRef = getenv('DB_PROJECT_REF') ?: (defined('DB_PROJECT_REF') ? DB_PROJECT_REF : '');
+
+                if (empty($projectRef)) {
+                    preg_match('/([a-z0-9]{20})/', $this->host, $matches);
+                    $projectRef = $matches[1] ?? '';
+                }
+
+                if (!empty($projectRef)) {
+                    $username .= '.' . $projectRef;
                 }
             }
         }

@@ -6,6 +6,7 @@ define('DB_NAME', getenv('DB_NAME') ?: 'postgres');
 define('DB_USER', getenv('DB_USER') ?: 'postgres');
 define('DB_PASS', getenv('DB_PASS') ?: 'avante_servico_2026'); // Definido como padrão para facilitar
 define('DB_PORT', getenv('DB_PORT') ?: '5432');
+define('DB_PROJECT_REF', getenv('DB_PROJECT_REF') ?: 'rybcmhwcafpzwroyduwz'); // Extraído do host padrão
 
 // URL Base da Aplicação
 // URL Base da Aplicação (Detecção Dinâmica)
