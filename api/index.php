@@ -21,14 +21,25 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
-// Roteamento Básico
-$url = isset($_GET['url']) ? rtrim($_GET['url'], '/') : 'login';
-$url = explode('/', $url);
+// Suporte para Vercel: Pega a URL do REQUEST_URI ou do parâmetro 'url'
+$request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$url_param = isset($_GET['url']) ? $_GET['url'] : '';
+
+// Limpa a URL (remove barra inicial e final)
+$path = $url_param ?: ltrim($request_uri, '/');
+$path = rtrim($path, '/');
+
+// Se estiver vazio, vai para o login
+if (empty($path)) {
+    $path = 'login';
+}
+
+$url = explode('/', $path);
 
 $controllerUri = $url[0];
 $method = isset($url[1]) ? $url[1] : 'index';
 
-// Converter metod-com-hifen para camelCase (ex: change-password -> changePassword)
+// Converter metod-com-hifen para camelCase
 if (isset($url[1]) && strpos($url[1], '-') !== false) {
     $method = str_replace('-', '', ucwords($url[1], '-'));
     $method = lcfirst($method);
@@ -36,11 +47,11 @@ if (isset($url[1]) && strpos($url[1], '-') !== false) {
 
 $params = array_slice($url, 2);
 
-// Mapa de Rotas (Plural URL -> Singular Controller)
+// Mapa de Rotas
 $routes = [
     'dashboard' => 'DashboardController',
     'auth' => 'AuthController',
-    'login' => 'AuthController', // Atalho
+    'login' => 'AuthController',
     'users' => 'UserController',
     'works' => 'WorkController',
     'tasks' => 'TaskController',
@@ -73,6 +84,6 @@ if (file_exists(__DIR__ . '/../app/Controllers/' . $controllerName . '.php')) {
         $auth = new AuthController();
         $auth->login();
     } else {
-        echo "Erro 404: Controller '$controllerName' não encontrado. Verifique a URL.";
+        echo "Erro 404: Controller '$controllerName' não encontrado. Caminho: /$path";
     }
 }
