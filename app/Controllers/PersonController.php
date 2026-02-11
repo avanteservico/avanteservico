@@ -37,9 +37,9 @@ class PersonController
         }
         unset($person);
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/people/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/people/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function create()
@@ -69,9 +69,9 @@ class PersonController
 
         $roles = $personModel->getDistinctRoles();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/people/create.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/people/create.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function show($id)
@@ -95,9 +95,9 @@ class PersonController
         $workModel = new Work();
         $works = $workModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/people/show.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/people/show.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     private function parseCurrency($value)

@@ -54,9 +54,9 @@ class TaskController
         // Dados para o modal de nova tarefa
         $people = $personModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/tasks/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/tasks/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function create()

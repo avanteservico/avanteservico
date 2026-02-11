@@ -18,16 +18,16 @@ class SupplierController
         $supplierModel = new Supplier();
         $suppliers = $supplierModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function create()
     {
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/form.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/form.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function store()
@@ -62,9 +62,9 @@ class SupplierController
             exit;
         }
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/form.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/form.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function update()
@@ -113,9 +113,9 @@ class SupplierController
         $expenseTypeModel = new ExpenseType();
         $expenseTypes = $expenseTypeModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/show.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/show.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function delete($id)
@@ -139,8 +139,8 @@ class SupplierController
         $workModel = new Work();
         $linkedData = $workModel->getAllSuppliersWithWorks();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/linked.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/linked.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 }

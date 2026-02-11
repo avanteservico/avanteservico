@@ -1,8 +1,9 @@
 <?php
 
-$baseDir = dirname(__DIR__);
-$configPath = $baseDir . '/app/Config/config.php';
-$dbPath = $baseDir . '/app/Config/Database.php';
+define('ROOT_PATH', dirname(__DIR__));
+$baseDir = ROOT_PATH;
+$configPath = ROOT_PATH . '/app/Config/config.php';
+$dbPath = ROOT_PATH . '/app/Config/Database.php';
 
 if (!file_exists($configPath)) {
     echo "<h1>Debug Info</h1>";

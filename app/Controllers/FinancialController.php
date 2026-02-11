@@ -46,9 +46,9 @@ class FinancialController
 
         $balance = $totalIncomes - $totalExpenses;
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/financial/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/financial/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function revenues()
@@ -61,9 +61,9 @@ class FinancialController
         $revenues = $revenueModel->getAll();
         $summary = $revenueModel->getGlobalSummary();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/financial/revenues.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/financial/revenues.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function expenses()
@@ -76,8 +76,8 @@ class FinancialController
         $expenses = $materialModel->getAll();
         $summary = $materialModel->getGlobalSummary();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/financial/expenses.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/financial/expenses.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 }

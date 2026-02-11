@@ -20,9 +20,9 @@ class UserController
         $userModel = new User();
         $users = $userModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/admin/users/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/admin/users/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function create()
@@ -42,9 +42,9 @@ class UserController
             }
         }
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/admin/users/create.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/admin/users/create.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function edit($id)
@@ -57,9 +57,9 @@ class UserController
             exit;
         }
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/admin/users/edit.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/admin/users/edit.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function update()
@@ -77,9 +77,9 @@ class UserController
             } else {
                 $error = "Erro ao atualizar usuário.";
                 $user = $userModel->findById($id);
-                require_once '../app/Views/templates/header.php';
-                require_once '../app/Views/admin/users/edit.php';
-                require_once '../app/Views/templates/footer.php';
+                require_once ROOT_PATH . '/app/Views/templates/header.php';
+                require_once ROOT_PATH . '/app/Views/admin/users/edit.php';
+                require_once ROOT_PATH . '/app/Views/templates/footer.php';
             }
         }
     }
@@ -156,8 +156,8 @@ class UserController
             'users' => 'Usuários (Admin)'
         ];
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/admin/users/permissions.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/admin/users/permissions.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 }

@@ -75,9 +75,9 @@ class ServiceController
         }
         unset($service);
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/services/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/services/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     private function parseCurrency($value)
@@ -132,9 +132,9 @@ class ServiceController
             }
         }
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/services/create.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/services/create.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function edit($id)
@@ -159,9 +159,9 @@ class ServiceController
         // Calcular valor devido para exibição inicial
         $service['valor_devido'] = $service['value'] * ($service['executed_percentage'] / 100);
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/services/edit.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/services/edit.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function update()

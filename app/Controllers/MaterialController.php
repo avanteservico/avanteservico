@@ -48,9 +48,9 @@ class MaterialController
         $supplierModel = new Supplier();
         $suppliers = $supplierModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/materials/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/materials/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     private function parseCurrency($value)

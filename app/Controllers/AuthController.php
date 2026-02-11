@@ -39,7 +39,7 @@ class AuthController
             }
         }
 
-        require_once '../app/Views/auth/login.php';
+        require_once ROOT_PATH . '/app/Views/auth/login.php';
     }
 
     public function logout()
@@ -75,7 +75,7 @@ class AuthController
             }
         }
 
-        require_once '../app/Views/auth/change_password.php';
+        require_once ROOT_PATH . '/app/Views/auth/change_password.php';
     }
 
     // Método oculto para criar o admin inicial se não existir

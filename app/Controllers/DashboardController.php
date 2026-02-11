@@ -31,8 +31,8 @@ class DashboardController
             'status' => 'Calculado'
         ];
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/dashboard.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/dashboard.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 }
