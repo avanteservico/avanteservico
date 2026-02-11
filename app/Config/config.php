@@ -8,7 +8,13 @@ define('DB_PASS', getenv('DB_PASS') ?: 'avante_servico_2026'); // Definido como 
 define('DB_PORT', getenv('DB_PORT') ?: '5432');
 
 // URL Base da Aplicação
-define('BASE_URL', getenv('BASE_URL') ?: 'http://localhost/avante_servico');
+// URL Base da Aplicação (Detecção Dinâmica)
+if (!defined('BASE_URL')) {
+    $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $defaultBase = ($host === 'localhost') ? 'http://localhost/avante_servico' : "$protocol://$host";
+    define('BASE_URL', getenv('BASE_URL') ?: $defaultBase);
+}
 
 // Ambiente (development, production)
 define('APP_ENV', getenv('APP_ENV') ?: 'development');
