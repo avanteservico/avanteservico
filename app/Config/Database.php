@@ -13,14 +13,18 @@ class Database
     {
         $this->conn = null;
 
-        // Ajuste automático para Supabase: O usuário muitas vezes precisa ser 'postgres.ID_PROJETO'
-        // Especialmente ao usar o Connection Pooler (porta 6543)
+        // Ajuste automático para Supabase: O usuário PRECISA ser 'usuario.ID_PROJETO' no Connection Pooler
         $username = $this->username;
-        if (strpos($this->host, 'supabase.co') !== false && strpos($username, '.') === false) {
-            $parts = explode('.', $this->host);
-            // db.rybcmhwcafpzwroyduwz.supabase.co -> ref é o segundo elemento
-            if (count($parts) >= 2 && $parts[0] === 'db') {
-                $username .= '.' . $parts[1];
+        $isSupabase = (strpos($this->host, 'supabase.co') !== false || strpos($this->host, 'supabase.com') !== false);
+
+        if ($isSupabase && strpos($username, '.') === false) {
+            // Só anexar o ID do projeto se estivermos usando o Pooler (Porta 6543)
+            // Conexões diretas (5432) não aceitam o sufixo no usuário.
+            if ($this->port == '6543' || strpos($this->host, 'pooler.supabase.com') !== false) {
+                preg_match('/([a-z0-9]{20})/', $this->host, $matches);
+                if (!empty($matches[1])) {
+                    $username .= '.' . $matches[1];
+                }
             }
         }
 
@@ -38,6 +42,7 @@ class Database
                 <p><strong>Sugestões:</strong></p>
                 <ul style='padding-left: 20px;'>
                     <li>Verifique se as credenciais no arquivo <code>app/Config/config.php</code> estão corretas.</li>
+                    <li><strong>Dica para Vercel:</strong> Use o <b>Connection Pooler</b> do Supabase (Porta <b>6543</b> e host <code>pooler.supabase.com</code>) para evitar erros de rede em ambientes serverless.</li>
                     <li>Verifique se o seu IP está autorizado no painel do Supabase (Network Restrictions).</li>
                     <li>Certifique-se de que a senha do banco de dados foi configurada corretamente no painel.</li>
                 </ul>
