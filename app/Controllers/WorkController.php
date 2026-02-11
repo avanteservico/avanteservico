@@ -1,8 +1,6 @@
 <?php
 
-require_once '../app/Models/Work.php';
-require_once '../app/Models/Service.php';
-require_once '../app/Helpers/AuthHelper.php';
+
 
 class WorkController
 {
@@ -166,7 +164,6 @@ class WorkController
 
         $linkedSuppliers = $workModel->getSuppliers($id);
 
-        require_once '../app/Models/Supplier.php';
         $supplierModel = new Supplier();
         $allSuppliers = $supplierModel->getAll();
 

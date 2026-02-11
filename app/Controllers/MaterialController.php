@@ -1,8 +1,8 @@
 <?php
 
-require_once '../app/Models/Material.php';
-require_once '../app/Models/Work.php';
-require_once '../app/Helpers/AuthHelper.php';
+
+
+
 
 class MaterialController
 {
@@ -39,12 +39,12 @@ class MaterialController
         $works = $workModel->getAll();
 
         // Load expense types
-        require_once '../app/Models/ExpenseType.php';
+        
         $expenseTypeModel = new ExpenseType();
         $expenseTypes = $expenseTypeModel->getAll();
 
         // Load suppliers
-        require_once '../app/Models/Supplier.php';
+        
         $supplierModel = new Supplier();
         $suppliers = $supplierModel->getAll();
 
@@ -75,7 +75,7 @@ class MaterialController
             // Handle new expense type creation
             $expense_type_id = $_POST['expense_type_id'] ?? 1;
             if ($expense_type_id === 'new' && !empty($_POST['new_expense_type'])) {
-                require_once '../app/Models/ExpenseType.php';
+                
                 $expenseTypeModel = new ExpenseType();
                 $expense_type_id = $expenseTypeModel->create(trim($_POST['new_expense_type']));
             }
@@ -114,7 +114,7 @@ class MaterialController
             // Handle new expense type creation
             $expense_type_id = $_POST['expense_type_id'] ?? 1;
             if ($expense_type_id === 'new' && !empty($_POST['new_expense_type'])) {
-                require_once '../app/Models/ExpenseType.php';
+                
                 $expenseTypeModel = new ExpenseType();
                 $expense_type_id = $expenseTypeModel->create(trim($_POST['new_expense_type']));
             }

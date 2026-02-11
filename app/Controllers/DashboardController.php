@@ -1,7 +1,6 @@
 <?php
 
-require_once '../app/Models/Work.php';
-require_once '../app/Helpers/AuthHelper.php';
+
 
 class DashboardController
 {
@@ -18,8 +17,7 @@ class DashboardController
         $summary = $workModel->getSummary();
 
         // Calcular dados financeiros reais
-        require_once '../app/Models/Revenue.php';
-        require_once '../app/Models/Material.php';
+
 
         $revenueModel = new Revenue();
         $materialModel = new Material();

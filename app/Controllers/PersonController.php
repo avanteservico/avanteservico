@@ -1,9 +1,9 @@
 <?php
 
-require_once '../app/Models/Person.php';
-require_once '../app/Models/PersonPayment.php';
-require_once '../app/Models/Work.php';
-require_once '../app/Helpers/AuthHelper.php';
+
+
+
+
 
 class PersonController
 {

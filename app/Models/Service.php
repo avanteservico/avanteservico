@@ -1,6 +1,6 @@
 <?php
 
-require_once '../app/Config/Database.php';
+
 require_once '../app/Models/SubService.php';
 
 class Service

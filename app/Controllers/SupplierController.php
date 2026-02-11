@@ -1,7 +1,7 @@
 <?php
 
-require_once '../app/Models/Supplier.php';
-require_once '../app/Helpers/AuthHelper.php';
+
+
 
 class SupplierController
 {
@@ -104,8 +104,8 @@ class SupplierController
         $summary = $supplierModel->getSummary($id);
 
         // Fetch Works and Expense Types for the "Add Expense" modal
-        require_once '../app/Models/Work.php';
-        require_once '../app/Models/ExpenseType.php';
+        
+        
 
         $workModel = new Work();
         $works = $workModel->getAllActive();
@@ -135,7 +135,7 @@ class SupplierController
 
     public function linked()
     {
-        require_once '../app/Models/Work.php';
+        
         $workModel = new Work();
         $linkedData = $workModel->getAllSuppliersWithWorks();
 

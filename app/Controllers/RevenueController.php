@@ -1,8 +1,8 @@
 <?php
 
-require_once '../app/Models/Revenue.php';
-require_once '../app/Models/Work.php';
-require_once '../app/Helpers/AuthHelper.php';
+
+
+
 
 class RevenueController
 {
