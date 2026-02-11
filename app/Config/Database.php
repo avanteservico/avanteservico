@@ -13,6 +13,17 @@ class Database
     {
         $this->conn = null;
 
+        // Ajuste automático para Supabase: O usuário muitas vezes precisa ser 'postgres.ID_PROJETO'
+        // Especialmente ao usar o Connection Pooler (porta 6543)
+        $username = $this->username;
+        if (strpos($this->host, 'supabase.co') !== false && strpos($username, '.') === false) {
+            $parts = explode('.', $this->host);
+            // db.rybcmhwcafpzwroyduwz.supabase.co -> ref é o segundo elemento
+            if (count($parts) >= 2 && $parts[0] === 'db') {
+                $username .= '.' . $parts[1];
+            }
+        }
+
         try {
             $dsn = "pgsql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->db_name . ";sslmode=require";
             $this->conn = new PDO($dsn, $this->username, $this->password);
