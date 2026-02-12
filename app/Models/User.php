@@ -33,7 +33,7 @@ class User
 
     public function create($name, $email, $password, $role = 'user')
     {
-        $query = "INSERT INTO " . $this->table_name . " (name, email, password, role, must_change_password) VALUES (:name, :email, :password, :role, 1)";
+        $query = "INSERT INTO " . $this->table_name . " (name, email, password, role, must_change_password) VALUES (:name, :email, :password, :role, TRUE)";
         $stmt = $this->conn->prepare($query);
 
         // Hash da senha
@@ -57,7 +57,7 @@ class User
 
     public function changePassword($id, $newPassword)
     {
-        $query = "UPDATE " . $this->table_name . " SET password = :password, must_change_password = 0 WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET password = :password, must_change_password = FALSE WHERE id = :id";
         $password_hash = password_hash($newPassword, PASSWORD_DEFAULT);
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':password', $password_hash);
@@ -144,7 +144,7 @@ class User
 
     public function resetPassword($id, $tempPassword)
     {
-        $query = "UPDATE " . $this->table_name . " SET password = :password, must_change_password = 1 WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " SET password = :password, must_change_password = TRUE WHERE id = :id";
         $password_hash = password_hash($tempPassword, PASSWORD_DEFAULT);
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':password', $password_hash);

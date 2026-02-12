@@ -104,8 +104,8 @@ class Supplier
     public function getSummary($supplier_id)
     {
         $query = "SELECT 
-            SUM(CASE WHEN is_paid = 1 THEN amount ELSE 0 END) as total_paid,
-            SUM(CASE WHEN is_paid = 0 THEN amount ELSE 0 END) as total_pending
+            SUM(CASE WHEN is_paid = true THEN amount ELSE 0 END) as total_paid,
+            SUM(CASE WHEN is_paid = false THEN amount ELSE 0 END) as total_pending
             FROM materials WHERE supplier_id = :supplier_id";
 
         $stmt = $this->conn->prepare($query);

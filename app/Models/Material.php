@@ -49,7 +49,7 @@ class Material
 
         $stmt = $this->conn->prepare($query);
 
-        $is_paid = isset($data['is_paid']) && $data['is_paid'] ? '1' : '0';
+        $is_paid = (isset($data['is_paid']) && $data['is_paid']) ? true : false;
         $expense_type_id = isset($data['expense_type_id']) && $data['expense_type_id'] ? $data['expense_type_id'] : 1;
         $supplier_id = isset($data['supplier_id']) && $data['supplier_id'] ? $data['supplier_id'] : 1; // Default to 1
 

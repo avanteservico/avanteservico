@@ -35,7 +35,7 @@ class PersonPayment
 
         $stmt = $this->conn->prepare($query);
 
-        $is_paid = isset($data['is_paid']) && $data['is_paid'] ? '1' : '0';
+        $is_paid = (isset($data['is_paid']) && $data['is_paid']) ? true : false;
 
         $stmt->bindParam(':person_id', $data['person_id']);
         $stmt->bindParam(':work_id', $data['work_id']);
