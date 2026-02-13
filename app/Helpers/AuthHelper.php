@@ -16,8 +16,22 @@ class AuthHelper
 
         // Se o usuário precisa trocar a senha e não está na página de troca de senha
         if (!empty($_SESSION['must_change_password']) && $_SESSION['must_change_password'] == 1) {
-            $currentUrl = $_GET['url'] ?? '';
-            if ($currentUrl !== 'auth/change-password' && $currentUrl !== 'auth/changePassword' && $currentUrl !== 'auth/logout') {
+            // Usar REQUEST_URI que funciona em todos os ambientes (localhost e Vercel)
+            $requestUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+            $currentPath = ltrim($requestUri, '/');
+
+            // Lista de caminhos permitidos (sem redirecionar)
+            $allowedPaths = ['auth/change-password', 'auth/changePassword', 'auth/logout', 'logout'];
+
+            $isAllowed = false;
+            foreach ($allowedPaths as $path) {
+                if (strpos($currentPath, $path) !== false) {
+                    $isAllowed = true;
+                    break;
+                }
+            }
+
+            if (!$isAllowed) {
                 header('Location: ' . BASE_URL . '/auth/change-password');
                 exit;
             }
