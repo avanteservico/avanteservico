@@ -50,9 +50,17 @@ class WorkController
             ];
 
             if ($workModel->create($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Obra criada com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/works');
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao criar obra.'
+                ];
                 $error = "Erro ao criar obra.";
             }
         }
@@ -105,9 +113,17 @@ class WorkController
                 $serviceModel = new Service();
                 $serviceModel->recalculateByWork($id, $totalValue);
 
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Obra atualizada com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/works/show/' . $id);
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao atualizar obra.'
+                ];
                 $error = "Erro ao atualizar obra.";
                 // Redirecionar com erro ou recarregar view (simplificado aqui)
                 header('Location: ' . BASE_URL . '/works/edit/' . $_POST['id']);
@@ -140,9 +156,17 @@ class WorkController
         }
         $workModel = new Work();
         if ($workModel->delete($id)) {
+            $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Obra excluída com sucesso!'
+            ];
             header('Location: ' . BASE_URL . '/works');
             exit;
         } else {
+            $_SESSION['flash_message'] = [
+                'type' => 'error',
+                'message' => 'Erro ao excluir obra.'
+            ];
             // Tratar erro
             header('Location: ' . BASE_URL . '/works');
         }
@@ -181,6 +205,10 @@ class WorkController
             $workModel = new Work();
             $workModel->addSupplier($work_id, $supplier_id);
 
+            $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Fornecedor vinculado com sucesso!'
+            ];
             header('Location: ' . BASE_URL . '/works/suppliers/' . $work_id);
             exit;
         }
@@ -193,6 +221,10 @@ class WorkController
         $workModel = new Work();
         $workModel->removeSupplier($work_id, $supplier_id);
 
+        $_SESSION['flash_message'] = [
+            'type' => 'success',
+            'message' => 'Vínculo com fornecedor removido com sucesso!'
+        ];
         header('Location: ' . BASE_URL . '/works/suppliers/' . $work_id);
         exit;
     }

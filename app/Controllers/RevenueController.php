@@ -71,10 +71,18 @@ class RevenueController
             ];
 
             if ($revenueModel->create($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Receita cadastrada com sucesso!'
+                ];
                 $redirect = $work_id ? '?work_id=' . $work_id : '';
                 header('Location: ' . BASE_URL . '/revenues' . $redirect);
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao cadastrar receita.'
+                ];
                 $redirect = $work_id ? '?work_id=' . $work_id . '&error=true' : '?error=true';
                 header('Location: ' . BASE_URL . '/revenues' . $redirect);
             }
@@ -101,10 +109,18 @@ class RevenueController
             ];
 
             if ($revenueModel->update($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Receita atualizada com sucesso!'
+                ];
                 $redirect = $work_id ? '?work_id=' . $work_id : '';
                 header('Location: ' . BASE_URL . '/revenues' . $redirect);
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao atualizar receita.'
+                ];
                 $redirect = $work_id ? '?work_id=' . $work_id . '&error=true' : '?error=true';
                 header('Location: ' . BASE_URL . '/revenues' . $redirect);
             }
@@ -119,7 +135,17 @@ class RevenueController
         $work_id = $_GET['work_id'] ?? null;
         if ($id) {
             $revenueModel = new Revenue();
-            $revenueModel->delete($id);
+            if ($revenueModel->delete($id)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Receita excluída com sucesso!'
+                ];
+            } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao excluir receita.'
+                ];
+            }
         }
         if ($work_id) {
             header('Location: ' . BASE_URL . '/revenues?work_id=' . $work_id);

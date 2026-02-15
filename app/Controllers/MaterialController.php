@@ -39,12 +39,12 @@ class MaterialController
         $works = $workModel->getAll();
 
         // Load expense types
-        
+
         $expenseTypeModel = new ExpenseType();
         $expenseTypes = $expenseTypeModel->getAll();
 
         // Load suppliers
-        
+
         $supplierModel = new Supplier();
         $suppliers = $supplierModel->getAll();
 
@@ -75,7 +75,7 @@ class MaterialController
             // Handle new expense type creation
             $expense_type_id = $_POST['expense_type_id'] ?? 1;
             if ($expense_type_id === 'new' && !empty($_POST['new_expense_type'])) {
-                
+
                 $expenseTypeModel = new ExpenseType();
                 $expense_type_id = $expenseTypeModel->create(trim($_POST['new_expense_type']));
             }
@@ -91,10 +91,18 @@ class MaterialController
             ];
 
             if ($materialModel->create($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Despesa/Material cadastrado com sucesso!'
+                ];
                 $redirect = $work_id ? '?work_id=' . $work_id : '';
                 header('Location: ' . BASE_URL . '/materials' . $redirect);
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao cadastrar despesa.'
+                ];
                 $redirect = $work_id ? '?work_id=' . $work_id . '&error=true' : '?error=true';
                 header('Location: ' . BASE_URL . '/materials' . $redirect);
             }
@@ -114,7 +122,7 @@ class MaterialController
             // Handle new expense type creation
             $expense_type_id = $_POST['expense_type_id'] ?? 1;
             if ($expense_type_id === 'new' && !empty($_POST['new_expense_type'])) {
-                
+
                 $expenseTypeModel = new ExpenseType();
                 $expense_type_id = $expenseTypeModel->create(trim($_POST['new_expense_type']));
             }
@@ -131,10 +139,18 @@ class MaterialController
             ];
 
             if ($materialModel->update($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Despesa/Material atualizado com sucesso!'
+                ];
                 $redirect = $work_id ? '?work_id=' . $work_id : '';
                 header('Location: ' . BASE_URL . '/materials' . $redirect);
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao atualizar despesa.'
+                ];
                 $redirect = $work_id ? '?work_id=' . $work_id . '&error=true' : '?error=true';
                 header('Location: ' . BASE_URL . '/materials' . $redirect);
             }
@@ -149,7 +165,17 @@ class MaterialController
         $work_id = $_GET['work_id'] ?? null;
         if ($id) {
             $materialModel = new Material();
-            $materialModel->delete($id);
+            if ($materialModel->delete($id)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Despesa excluída com sucesso!'
+                ];
+            } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao excluir despesa.'
+                ];
+            }
         }
         if ($work_id) {
             header('Location: ' . BASE_URL . '/materials?work_id=' . $work_id);

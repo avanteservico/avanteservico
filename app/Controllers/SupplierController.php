@@ -43,9 +43,17 @@ class SupplierController
 
             $supplierModel = new Supplier();
             if ($supplierModel->create($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Fornecedor cadastrado com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/suppliers');
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao cadastrar fornecedor.'
+                ];
                 header('Location: ' . BASE_URL . '/suppliers/create?error=true');
                 exit;
             }
@@ -81,9 +89,17 @@ class SupplierController
 
             $supplierModel = new Supplier();
             if ($supplierModel->update($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Fornecedor atualizado com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/suppliers');
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao atualizar fornecedor.'
+                ];
                 header('Location: ' . BASE_URL . '/suppliers/edit/' . $data['id'] . '?error=true');
                 exit;
             }
@@ -104,8 +120,8 @@ class SupplierController
         $summary = $supplierModel->getSummary($id);
 
         // Fetch Works and Expense Types for the "Add Expense" modal
-        
-        
+
+
 
         $workModel = new Work();
         $works = $workModel->getAllActive();
@@ -123,8 +139,16 @@ class SupplierController
         if ($id) {
             $supplierModel = new Supplier();
             if ($supplierModel->delete($id)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Fornecedor excluído com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/suppliers?deleted=true');
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao excluir: fornecedor possui vínculos.'
+                ];
                 header('Location: ' . BASE_URL . '/suppliers?error=dependence'); // Cannot delete due to foreign keys
             }
         } else {
@@ -135,7 +159,7 @@ class SupplierController
 
     public function linked()
     {
-        
+
         $workModel = new Work();
         $linkedData = $workModel->getAllSuppliersWithWorks();
 

@@ -35,7 +35,8 @@
                 Nenhuma despesa cadastrada.
             </div>
         <?php else: ?>
-            <div class="overflow-x-auto">
+            <!-- Tabela (Desktop) -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
@@ -86,6 +87,43 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Cards (Mobile) -->
+            <div class="md:hidden">
+                <?php foreach ($expenses as $expense): ?>
+                    <div class="p-4 border-b border-gray-200 last:border-b-0">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-900">
+                                    <?= htmlspecialchars($expense['name']) ?>
+                                </h3>
+                                <div class="text-xs text-gray-500 font-medium">
+                                    <?= htmlspecialchars($expense['work_name'] ?? 'Sem Obra') ?>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-red-600">
+                                    - R$ <?= number_format($expense['amount'], 2, ',', '.') ?>
+                                </p>
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $expense['is_paid'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
+                                    <?= $expense['is_paid'] ? 'Pago' : 'A Pagar' ?>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-gray-500">
+                            <div>
+                                <span class="block text-gray-400">Tipo</span>
+                                <?= htmlspecialchars($expense['expense_type_name'] ?? 'Diversas') ?>
+                            </div>
+                            <div>
+                                <span class="block text-gray-400">Data</span>
+                                <?= date('d/m/Y', strtotime($expense['purchase_date'])) ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>

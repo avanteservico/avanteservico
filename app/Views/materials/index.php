@@ -50,7 +50,8 @@
                 Nenhuma despesa ou material cadastrado.
             </div>
         <?php else: ?>
-            <div class="overflow-x-auto">
+            <!-- Tabela (Desktop) -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
@@ -114,6 +115,59 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Cards (Mobile) -->
+            <div class="md:hidden">
+                <?php foreach ($materials as $material): ?>
+                    <div class="p-4 border-b border-gray-200 last:border-b-0">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-900">
+                                    <?= htmlspecialchars($material['name']) ?>
+                                </h3>
+                                <?php if (!$work): ?>
+                                    <p class="text-xs text-gray-500"><?= htmlspecialchars($material['work_name'] ?? 'Sem Obra') ?>
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-red-600">
+                                    - R$ <?= number_format($material['amount'], 2, ',', '.') ?>
+                                </p>
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $material['is_paid'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
+                                    <?= $material['is_paid'] ? 'Pago' : 'A Pagar' ?>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-gray-500 mb-3">
+                            <div>
+                                <span class="block text-gray-400">Fornecedor</span>
+                                <?= htmlspecialchars($material['supplier_name'] ?? 'Padrão') ?>
+                            </div>
+                            <div>
+                                <span class="block text-gray-400">Tipo</span>
+                                <?= htmlspecialchars($material['expense_type_name'] ?? 'Diversas') ?>
+                            </div>
+                            <div>
+                                <span class="block text-gray-400">Data</span>
+                                <?= date('d/m/Y', strtotime($material['purchase_date'])) ?>
+                            </div>
+                        </div>
+                        <div class="flex justify-end space-x-4 border-t border-gray-100 pt-2">
+                            <button onclick='editMaterial(<?= json_encode($material) ?>)'
+                                class="text-xs font-medium text-primary hover:text-blue-900">
+                                Editar
+                            </button>
+                            <a href="<?= BASE_URL ?>/materials/delete/<?= $material['id'] ?><?= $work ? '?work_id=' . $work['id'] : '' ?>"
+                                onclick="return confirm('Excluir esta despesa?')"
+                                class="text-xs font-medium text-red-600 hover:text-red-900">
+                                Excluir
+                            </a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>

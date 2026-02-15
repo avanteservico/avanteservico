@@ -60,9 +60,17 @@ class PersonController
             ];
 
             if ($personModel->create($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Pessoa cadastrada com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/people');
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao cadastrar pessoa.'
+                ];
                 $error = "Erro ao cadastrar pessoa.";
             }
         }
@@ -129,10 +137,17 @@ class PersonController
             ];
 
             if ($paymentModel->create($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Pagamento registrado com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/people/show/' . $person_id);
                 exit;
             } else {
-                // Erro
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao registrar pagamento.'
+                ];
                 header('Location: ' . BASE_URL . '/people/show/' . $person_id . '?error=true');
             }
         }
@@ -159,9 +174,17 @@ class PersonController
             ];
 
             if ($paymentModel->update($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Pagamento atualizado com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/people/show/' . $person_id);
                 exit;
             } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao atualizar pagamento.'
+                ];
                 header('Location: ' . BASE_URL . '/people/show/' . $person_id . '?error=true');
             }
         }
@@ -175,7 +198,17 @@ class PersonController
         $person_id = $_GET['person_id'] ?? null;
         if ($id) {
             $paymentModel = new PersonPayment();
-            $paymentModel->delete($id);
+            if ($paymentModel->delete($id)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Pagamento excluído com sucesso!'
+                ];
+            } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao excluir pagamento.'
+                ];
+            }
         }
 
         if ($person_id) {

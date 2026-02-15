@@ -82,8 +82,17 @@ class TaskController
             ];
 
             if ($taskModel->create($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Tarefa criada com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/tasks?work_id=' . $_POST['work_id']);
                 exit;
+            } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao criar tarefa.'
+                ];
             }
         }
     }
@@ -106,8 +115,17 @@ class TaskController
             ];
 
             if ($taskModel->update($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Tarefa atualizada com sucesso!'
+                ];
                 header('Location: ' . BASE_URL . '/tasks?work_id=' . $_POST['work_id']);
                 exit;
+            } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao atualizar tarefa.'
+                ];
             }
         }
     }
@@ -162,7 +180,17 @@ class TaskController
         $work_id = $_GET['work_id'] ?? null;
         if ($id) {
             $taskModel = new Task();
-            $taskModel->delete($id);
+            if ($taskModel->delete($id)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Tarefa excluída com sucesso!'
+                ];
+            } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao excluir tarefa.'
+                ];
+            }
         }
         if ($work_id) {
             header('Location: ' . BASE_URL . '/tasks?work_id=' . $work_id);
