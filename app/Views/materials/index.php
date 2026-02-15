@@ -44,16 +44,16 @@
     </div>
 
     <!-- Lista de Materiais -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
         <?php if (empty($materials)): ?>
             <div class="p-8 text-center text-gray-400 italic">
                 Nenhuma despesa ou material cadastrado.
             </div>
         <?php else: ?>
             <!-- Tabela (Desktop) -->
-            <div class="hidden lg:block overflow-auto max-h-[70vh] shadow ring-1 ring-black ring-opacity-5 lg:rounded-lg">
+            <div class="hidden lg:block overflow-x-auto shadow ring-1 ring-black ring-opacity-5 lg:rounded-lg">
                 <table class="min-w-full divide-y divide-gray-200 relative">
-                    <thead class="bg-gray-50 sticky top-0 z-10 shadow-sm">
+                    <thead class="bg-gray-50 sticky top-16 z-30 shadow-sm">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Descrição / Material</th>
