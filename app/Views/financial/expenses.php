@@ -35,10 +35,10 @@
                 Nenhuma despesa ou material cadastrado.
             </div>
         <?php else: ?>
-            <div class="flex overflow-x-auto pb-4 gap-6 snap-x scrollbar-hide sm:scrollbar-default">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php foreach ($suppliersGrouped as $sId => $group): ?>
                     <div
-                        class="min-w-[300px] md:min-w-[350px] bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow duration-200 snap-start">
+                        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow duration-200">
                         <!-- Card Header -->
                         <div class="p-5 border-b border-gray-50 bg-gray-50/30">
                             <div class="flex justify-between items-start mb-4">
