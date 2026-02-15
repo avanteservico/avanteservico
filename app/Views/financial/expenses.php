@@ -36,7 +36,7 @@
             </div>
         <?php else: ?>
             <!-- Tabela (Desktop) -->
-            <div class="hidden md:block overflow-auto max-h-[70vh] shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <div class="hidden lg:block overflow-auto max-h-[70vh] shadow ring-1 ring-black ring-opacity-5 lg:rounded-lg">
                 <table class="min-w-full divide-y divide-gray-200 relative">
                     <thead class="bg-gray-50 sticky top-0 z-10 shadow-sm">
                         <tr>
@@ -90,7 +90,7 @@
             </div>
 
             <!-- Cards (Mobile) -->
-            <div class="md:hidden">
+            <div class="lg:hidden">
                 <?php foreach ($expenses as $expense): ?>
                     <div class="p-4 border-b border-gray-200 last:border-b-0">
                         <div class="flex justify-between items-start mb-2">
