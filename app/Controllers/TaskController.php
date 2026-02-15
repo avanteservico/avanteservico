@@ -1,9 +1,9 @@
 <?php
 
-require_once '../app/Models/Task.php';
-require_once '../app/Models/Work.php';
-require_once '../app/Models/Person.php';
-require_once '../app/Helpers/AuthHelper.php';
+
+
+
+
 
 class TaskController
 {
@@ -59,9 +59,9 @@ class TaskController
         // Dados para o modal de nova tarefa
         $people = $personModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/tasks/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/tasks/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function create()

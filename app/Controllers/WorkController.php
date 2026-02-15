@@ -1,8 +1,6 @@
 <?php
 
-require_once '../app/Models/Work.php';
-require_once '../app/Models/Service.php';
-require_once '../app/Helpers/AuthHelper.php';
+
 
 class WorkController
 {
@@ -20,9 +18,9 @@ class WorkController
         $workModel = new Work();
         $works = $workModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/works/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/works/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     private function parseCurrency($value)
@@ -59,9 +57,9 @@ class WorkController
             }
         }
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/works/create.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/works/create.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function edit($id)
@@ -77,9 +75,9 @@ class WorkController
             exit;
         }
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/works/edit.php'; // View a ser criada
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/works/edit.php'; // View a ser criada
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function update()
@@ -130,9 +128,9 @@ class WorkController
             exit;
         }
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/works/show.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/works/show.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function delete($id)
@@ -166,13 +164,12 @@ class WorkController
 
         $linkedSuppliers = $workModel->getSuppliers($id);
 
-        require_once '../app/Models/Supplier.php';
         $supplierModel = new Supplier();
         $allSuppliers = $supplierModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/works/suppliers.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/works/suppliers.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function addSupplier()

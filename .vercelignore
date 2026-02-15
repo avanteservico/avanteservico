@@ -1,0 +1,7 @@
+public/index.php
+public/*.php
+.htaccess
+/venv
+/node_modules
+.git
+.env

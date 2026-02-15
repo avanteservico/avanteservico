@@ -1,7 +1,7 @@
 <?php
 
-require_once '../app/Models/User.php';
-require_once '../app/Helpers/AuthHelper.php';
+
+
 
 class ProfileController
 {
@@ -15,9 +15,9 @@ class ProfileController
         $userModel = new User();
         $user = $userModel->findById($_SESSION['user_id']);
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/profile/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/profile/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function update()
@@ -36,9 +36,9 @@ class ProfileController
             }
 
             $user = $userModel->findById($id);
-            require_once '../app/Views/templates/header.php';
-            require_once '../app/Views/profile/index.php';
-            require_once '../app/Views/templates/footer.php';
+            require_once ROOT_PATH . '/app/Views/templates/header.php';
+            require_once ROOT_PATH . '/app/Views/profile/index.php';
+            require_once ROOT_PATH . '/app/Views/templates/footer.php';
         }
     }
 }

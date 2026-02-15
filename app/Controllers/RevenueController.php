@@ -1,8 +1,8 @@
 <?php
 
-require_once '../app/Models/Revenue.php';
-require_once '../app/Models/Work.php';
-require_once '../app/Helpers/AuthHelper.php';
+
+
+
 
 class RevenueController
 {
@@ -38,9 +38,9 @@ class RevenueController
 
         $works = $workModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/revenues/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/revenues/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     private function parseCurrency($value)

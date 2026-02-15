@@ -1,7 +1,7 @@
 <?php
 
-require_once '../app/Models/Supplier.php';
-require_once '../app/Helpers/AuthHelper.php';
+
+
 
 class SupplierController
 {
@@ -18,16 +18,16 @@ class SupplierController
         $supplierModel = new Supplier();
         $suppliers = $supplierModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/index.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/index.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function create()
     {
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/form.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/form.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function store()
@@ -62,9 +62,9 @@ class SupplierController
             exit;
         }
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/form.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/form.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function update()
@@ -104,8 +104,8 @@ class SupplierController
         $summary = $supplierModel->getSummary($id);
 
         // Fetch Works and Expense Types for the "Add Expense" modal
-        require_once '../app/Models/Work.php';
-        require_once '../app/Models/ExpenseType.php';
+        
+        
 
         $workModel = new Work();
         $works = $workModel->getAllActive();
@@ -113,9 +113,9 @@ class SupplierController
         $expenseTypeModel = new ExpenseType();
         $expenseTypes = $expenseTypeModel->getAll();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/show.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/show.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
     public function delete($id)
@@ -135,12 +135,12 @@ class SupplierController
 
     public function linked()
     {
-        require_once '../app/Models/Work.php';
+        
         $workModel = new Work();
         $linkedData = $workModel->getAllSuppliersWithWorks();
 
-        require_once '../app/Views/templates/header.php';
-        require_once '../app/Views/suppliers/linked.php';
-        require_once '../app/Views/templates/footer.php';
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/suppliers/linked.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 }
