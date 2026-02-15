@@ -36,6 +36,11 @@ class TaskController
             ];
 
             foreach ($allTasks as $t) {
+                // Map database status 'in_progress' to frontend status 'doing'
+                if ($t['status'] === 'in_progress') {
+                    $t['status'] = 'doing';
+                }
+
                 if (isset($tasks[$t['status']])) {
                     $tasks[$t['status']][] = $t;
                 }
@@ -109,23 +114,43 @@ class TaskController
 
     public function updateStatus()
     {
+        // Limpar qualquer output anterior que possa corromper o JSON
+        if (ob_get_length())
+            ob_clean();
+
+        header('Content-Type: application/json');
+
         if (!AuthHelper::hasPermission('tasks', 'update')) {
-            header('Content-Type: application/json');
             echo json_encode(['success' => false, 'message' => 'Sem permissão']);
             exit;
         }
+
         // Endpoint para AJAX/Fetch do Drag and Drop
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = json_decode(file_get_contents('php://input'), true);
+            $input = file_get_contents('php://input');
+            $data = json_decode($input, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                echo json_encode(['success' => false, 'message' => 'JSON inválido']);
+                exit;
+            }
 
             if (isset($data['id']) && isset($data['status'])) {
                 $taskModel = new Task();
-                $success = $taskModel->updateStatus($data['id'], $data['status']);
-
-                header('Content-Type: application/json');
-                echo json_encode(['success' => $success]);
+                try {
+                    $success = $taskModel->updateStatus($data['id'], $data['status']);
+                    echo json_encode(['success' => $success]);
+                } catch (Exception $e) {
+                    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+                }
+                exit;
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Dados incompletos']);
                 exit;
             }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Método inválido']);
+            exit;
         }
     }
 

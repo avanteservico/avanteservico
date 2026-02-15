@@ -91,6 +91,17 @@ class Task
 
     public function updateStatus($id, $status)
     {
+        // Mapear status do frontend (drag and drop) para o banco de dados
+        $statusMap = [
+            'doing' => 'in_progress',
+            'todo' => 'todo',
+            'done' => 'done'
+        ];
+
+        if (array_key_exists($status, $statusMap)) {
+            $status = $statusMap[$status];
+        }
+
         $query = "UPDATE " . $this->table_name . " SET status = :status WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':status', $status);

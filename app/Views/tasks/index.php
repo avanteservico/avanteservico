@@ -290,16 +290,22 @@
                 status: status
             })
         })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    alert('Erro ao atualizar status da tarefa.');
-                    location.reload();
+            .then(response => response.text())
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
+                    if (!data.success) {
+                        alert('Erro ao atualizar status: ' + (data.message || 'Erro desconhecido'));
+                        location.reload();
+                    }
+                } catch (e) {
+                    console.error('Erro ao processar resposta do servidor:', text);
+                    alert('Erro de comunicação com o servidor. Verifique o console para mais detalhes.');
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
-                alert('Erro de conexão.');
+                alert('Erro de conexão ou rede.');
             });
     }
 </script>
