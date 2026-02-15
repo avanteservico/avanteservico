@@ -73,8 +73,35 @@ class FinancialController
         }
 
         $materialModel = new Material();
-        $expenses = $materialModel->getAll();
+        $expensesRaw = $materialModel->getAll();
         $summary = $materialModel->getGlobalSummary();
+
+        // Agrupar por fornecedor
+        $suppliersGrouped = [];
+        foreach ($expensesRaw as $e) {
+            $sId = $e['supplier_id'] ?? 0;
+            $sName = $e['supplier_name'] ?? 'Padrão / Diversos';
+
+            if (!isset($suppliersGrouped[$sId])) {
+                $suppliersGrouped[$sId] = [
+                    'id' => $sId,
+                    'name' => $sName,
+                    'total_paid' => 0,
+                    'total_pending' => 0,
+                    'items' => []
+                ];
+            }
+
+            if ($e['is_paid']) {
+                $suppliersGrouped[$sId]['total_paid'] += $e['amount'];
+            } else {
+                $suppliersGrouped[$sId]['total_pending'] += $e['amount'];
+            }
+
+            $suppliersGrouped[$sId]['items'][] = $e;
+        }
+
+        $expenses = $expensesRaw;
 
         require_once ROOT_PATH . '/app/Views/templates/header.php';
         require_once ROOT_PATH . '/app/Views/financial/expenses.php';

@@ -28,98 +28,100 @@
         </div>
     </div>
 
-    <!-- Lista de Despesas -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-        <?php if (empty($expenses)): ?>
-            <div class="p-8 text-center text-gray-400 italic">
-                Nenhuma despesa cadastrada.
+    <!-- Lista de Despesas Agrupada por Fornecedor -->
+    <div class="space-y-6">
+        <?php if (empty($suppliersGrouped)): ?>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center text-gray-400 italic">
+                Nenhuma despesa ou material cadastrado.
             </div>
         <?php else: ?>
-            <!-- Tabela (Desktop) -->
-            <div class="hidden lg:block overflow-x-auto shadow ring-1 ring-black ring-opacity-5 lg:rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200 relative">
-                    <thead class="bg-gray-50 sticky top-16 z-30 shadow-sm">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Obra</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Descrição</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Tipo</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Data</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Valor</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <?php foreach ($expenses as $expense): ?>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">
-                                        <?= htmlspecialchars($expense['work_name'] ?? 'Sem Obra') ?>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm text-gray-900">
-                                        <?= htmlspecialchars($expense['name']) ?>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                    <?= htmlspecialchars($expense['expense_type_name'] ?? 'Diversas') ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    <?= date('d/m/Y', strtotime($expense['purchase_date'])) ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-600 text-right">
-                                    - R$
-                                    <?= number_format($expense['amount'], 2, ',', '.') ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $expense['is_paid'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
-                                        <?= $expense['is_paid'] ? 'Pago' : 'A Pagar' ?>
-                                    </span>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Cards (Mobile) -->
-            <div class="lg:hidden">
-                <?php foreach ($expenses as $expense): ?>
-                    <div class="p-4 border-b border-gray-200 last:border-b-0">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-900">
-                                    <?= htmlspecialchars($expense['name']) ?>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php foreach ($suppliersGrouped as $sId => $group): ?>
+                    <div
+                        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow duration-200">
+                        <!-- Card Header -->
+                        <div class="p-5 border-b border-gray-50 bg-gray-50/30">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-lg font-bold text-gray-900 line-clamp-1"
+                                    title="<?= htmlspecialchars($group['name']) ?>">
+                                    <?= htmlspecialchars($group['name']) ?>
                                 </h3>
-                                <div class="text-xs text-gray-500 font-medium">
-                                    <?= htmlspecialchars($expense['work_name'] ?? 'Sem Obra') ?>
+                                <div class="bg-primary/10 text-primary p-1.5 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-sm font-bold text-red-600">
-                                    - R$ <?= number_format($expense['amount'], 2, ',', '.') ?>
-                                </p>
-                                <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $expense['is_paid'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
-                                    <?= $expense['is_paid'] ? 'Pago' : 'A Pagar' ?>
-                                </span>
+
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500">Pago:</span>
+                                    <span class="font-bold text-green-600">
+                                        R$
+                                        <?= number_format($group['total_paid'], 2, ',', '.') ?>
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500">A Pagar:</span>
+                                    <span class="font-bold text-red-500">
+                                        R$
+                                        <?= number_format($group['total_pending'], 2, ',', '.') ?>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 text-xs text-gray-500">
-                            <div>
-                                <span class="block text-gray-400">Tipo</span>
-                                <?= htmlspecialchars($expense['expense_type_name'] ?? 'Diversas') ?>
-                            </div>
-                            <div>
-                                <span class="block text-gray-400">Data</span>
-                                <?= date('d/m/Y', strtotime($expense['purchase_date'])) ?>
+
+                        <!-- Card Actions & Toggle -->
+                        <div class="px-5 py-3 bg-white flex justify-between items-center">
+                            <button onclick="toggleSupplierItems(<?= $sId ?>)"
+                                class="text-primary hover:text-blue-800 text-sm font-semibold flex items-center transition-colors">
+                                <span id="toggle-text-<?= $sId ?>">Ver Detalhes (
+                                    <?= count($group['items']) ?>)
+                                </span>
+                                <svg id="toggle-icon-<?= $sId ?>" xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 ml-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Items List (Hidden by default) -->
+                        <div id="supplier-items-<?= $sId ?>" class="hidden border-t border-gray-100 bg-gray-50/50">
+                            <div class="px-5 py-4 space-y-3">
+                                <?php foreach ($group['items'] as $expense): ?>
+                                    <div class="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative group">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                                <?= date('d/m/Y', strtotime($expense['purchase_date'])) ?>
+                                            </span>
+                                            <span
+                                                class="px-2 py-0.5 text-[10px] font-bold rounded-full <?= $expense['is_paid'] ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
+                                                <?= $expense['is_paid'] ? 'PAGO' : 'PENDENTE' ?>
+                                            </span>
+                                        </div>
+                                        <div class="text-sm font-bold text-gray-900 line-clamp-1">
+                                            <?= htmlspecialchars($expense['name']) ?>
+                                        </div>
+                                        <div class="text-[10px] text-primary mt-1 font-medium">
+                                            Obra:
+                                            <?= htmlspecialchars($expense['work_name'] ?? 'Sem Obra') ?>
+                                        </div>
+                                        <div class="flex justify-between items-end mt-2">
+                                            <div class="text-[10px] text-gray-400">
+                                                Tipo:
+                                                <?= htmlspecialchars($expense['expense_type_name'] ?? 'Diversas') ?>
+                                            </div>
+                                            <div
+                                                class="text-sm font-black <?= $expense['is_paid'] ? 'text-green-600' : 'text-red-500' ?>">
+                                                R$
+                                                <?= number_format($expense['amount'], 2, ',', '.') ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
@@ -128,3 +130,22 @@
         <?php endif; ?>
     </div>
 </div>
+
+<script>
+    function toggleSupplierItems(sId) {
+        const itemsDiv = document.getElementById(`supplier-items-${sId}`);
+        const toggleText = document.getElementById(`toggle-text-${sId}`);
+        const toggleIcon = document.getElementById(`toggle-icon-${sId}`);
+        const isHidden = itemsDiv.classList.contains('hidden');
+
+        if (isHidden) {
+            itemsDiv.classList.remove('hidden');
+            toggleText.innerText = 'Recolher Detalhes';
+            toggleIcon.style.transform = 'rotate(180deg)';
+        } else {
+            itemsDiv.classList.add('hidden');
+            toggleText.innerText = `Ver Detalhes (${itemsDiv.querySelectorAll('.bg-white').length})`;
+            toggleIcon.style.transform = 'rotate(0deg)';
+        }
+    }
+</script>

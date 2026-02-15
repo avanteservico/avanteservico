@@ -31,11 +31,35 @@ class MaterialController
         }
 
         $materialModel = new Material();
-        $materials = $materialModel->getAllByWorkId($work_id);
+        $materialsRaw = $materialModel->getAllByWorkId($work_id);
         $summary = $materialModel->getSummaryByWorkId($work_id);
 
-        $works = [$work];
+        // Agrupar por fornecedor
+        $suppliersGrouped = [];
+        foreach ($materialsRaw as $m) {
+            $sId = $m['supplier_id'] ?? 0;
+            $sName = $m['supplier_name'] ?? 'Padrão / Diversos';
 
+            if (!isset($suppliersGrouped[$sId])) {
+                $suppliersGrouped[$sId] = [
+                    'id' => $sId,
+                    'name' => $sName,
+                    'total_paid' => 0,
+                    'total_pending' => 0,
+                    'items' => []
+                ];
+            }
+
+            if ($m['is_paid']) {
+                $suppliersGrouped[$sId]['total_paid'] += $m['amount'];
+            } else {
+                $suppliersGrouped[$sId]['total_pending'] += $m['amount'];
+            }
+
+            $suppliersGrouped[$sId]['items'][] = $m;
+        }
+
+        $materials = $materialsRaw; // Keep for compatibility if needed, but we'll use $suppliersGrouped
         $works = $workModel->getAll();
 
         // Load expense types

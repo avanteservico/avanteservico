@@ -43,128 +43,128 @@
         </div>
     </div>
 
-    <!-- Lista de Materiais -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-        <?php if (empty($materials)): ?>
-            <div class="p-8 text-center text-gray-400 italic">
+    <!-- Lista de Materiais Agrupada por Fornecedor -->
+    <div class="space-y-6">
+        <?php if (empty($suppliersGrouped)): ?>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center text-gray-400 italic">
                 Nenhuma despesa ou material cadastrado.
             </div>
         <?php else: ?>
-            <!-- Tabela (Desktop) -->
-            <div class="hidden lg:block overflow-x-auto shadow ring-1 ring-black ring-opacity-5 lg:rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200 relative">
-                    <thead class="bg-gray-50 sticky top-16 z-30 shadow-sm">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Descrição / Material</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Fornecedor</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Tipo</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Data Compra</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Valor</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <?php foreach ($materials as $material): ?>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">
-                                        <?= htmlspecialchars($material['name']) ?>
-                                    </div>
-                                    <?php if (!$work): ?>
-                                        <div class="text-xs text-gray-400">
-                                            <?= htmlspecialchars($material['work_name'] ?? 'Sem Obra') ?>
-                                        </div>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                    <?= htmlspecialchars($material['supplier_name'] ?? 'Padrão') ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                    <?= htmlspecialchars($material['expense_type_name'] ?? 'Diversas') ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    <?= date('d/m/Y', strtotime($material['purchase_date'])) ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-600 text-right">
-                                    - R$
-                                    <?= number_format($material['amount'], 2, ',', '.') ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $material['is_paid'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
-                                        <?= $material['is_paid'] ? 'Pago' : 'A Pagar' ?>
-                                    </span>
-                                </td>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-end space-x-3">
-                                    <button onclick='editMaterial(<?= json_encode($material) ?>)'
-                                        class="text-primary hover:text-blue-900">Editar</button>
-                                    <a href="<?= BASE_URL ?>/materials/delete/<?= $material['id'] ?><?= $work ? '?work_id=' . $work['id'] : '' ?>"
-                                        onclick="return confirm('Excluir esta despesa?')"
-                                        class="text-red-600 hover:text-red-900">Excluir</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Cards (Mobile) -->
-            <div class="lg:hidden">
-                <?php foreach ($materials as $material): ?>
-                    <div class="p-4 border-b border-gray-200 last:border-b-0">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-900">
-                                    <?= htmlspecialchars($material['name']) ?>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php foreach ($suppliersGrouped as $sId => $group): ?>
+                    <div
+                        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow duration-200">
+                        <!-- Card Header -->
+                        <div class="p-5 border-b border-gray-50 bg-gray-50/30">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-lg font-bold text-gray-900 line-clamp-1"
+                                    title="<?= htmlspecialchars($group['name']) ?>">
+                                    <?= htmlspecialchars($group['name']) ?>
                                 </h3>
-                                <?php if (!$work): ?>
-                                    <p class="text-xs text-gray-500"><?= htmlspecialchars($material['work_name'] ?? 'Sem Obra') ?>
-                                    </p>
-                                <?php endif; ?>
+                                <div class="bg-primary/10 text-primary p-1.5 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-sm font-bold text-red-600">
-                                    - R$ <?= number_format($material['amount'], 2, ',', '.') ?>
-                                </p>
-                                <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?= $material['is_paid'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
-                                    <?= $material['is_paid'] ? 'Pago' : 'A Pagar' ?>
+
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500">Pago:</span>
+                                    <span class="font-bold text-green-600">
+                                        R$
+                                        <?= number_format($group['total_paid'], 2, ',', '.') ?>
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500">A Pagar:</span>
+                                    <span class="font-bold text-red-500">
+                                        R$
+                                        <?= number_format($group['total_pending'], 2, ',', '.') ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Actions & Toggle -->
+                        <div class="px-5 py-3 bg-white flex justify-between items-center">
+                            <button onclick="toggleSupplierItems(<?= $sId ?>)"
+                                class="text-primary hover:text-blue-800 text-sm font-semibold flex items-center transition-colors">
+                                <span id="toggle-text-<?= $sId ?>">Ver Detalhes (
+                                    <?= count($group['items']) ?>)
                                 </span>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 text-xs text-gray-500 mb-3">
-                            <div>
-                                <span class="block text-gray-400">Fornecedor</span>
-                                <?= htmlspecialchars($material['supplier_name'] ?? 'Padrão') ?>
-                            </div>
-                            <div>
-                                <span class="block text-gray-400">Tipo</span>
-                                <?= htmlspecialchars($material['expense_type_name'] ?? 'Diversas') ?>
-                            </div>
-                            <div>
-                                <span class="block text-gray-400">Data</span>
-                                <?= date('d/m/Y', strtotime($material['purchase_date'])) ?>
-                            </div>
-                        </div>
-                        <div class="flex justify-end space-x-4 border-t border-gray-100 pt-2">
-                            <button onclick='editMaterial(<?= json_encode($material) ?>)'
-                                class="text-xs font-medium text-primary hover:text-blue-900">
-                                Editar
+                                <svg id="toggle-icon-<?= $sId ?>" xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 ml-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
                             </button>
-                            <a href="<?= BASE_URL ?>/materials/delete/<?= $material['id'] ?><?= $work ? '?work_id=' . $work['id'] : '' ?>"
-                                onclick="return confirm('Excluir esta despesa?')"
-                                class="text-xs font-medium text-red-600 hover:text-red-900">
-                                Excluir
+                            <a href="<?= BASE_URL ?>/materials?work_id=<?= $work['id'] ?>&action=new&supplier_id=<?= $sId ?>"
+                                class="text-gray-400 hover:text-primary p-1 bg-gray-50 rounded-full transition-colors"
+                                title="Nova despesa para este fornecedor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
                             </a>
+                        </div>
+
+                        <!-- Items List (Hidden by default) -->
+                        <div id="supplier-items-<?= $sId ?>" class="hidden border-t border-gray-100 bg-gray-50/50">
+                            <div class="px-5 py-4 space-y-3">
+                                <?php foreach ($group['items'] as $material): ?>
+                                    <div class="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative group">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                                <?= date('d/m/Y', strtotime($material['purchase_date'])) ?>
+                                            </span>
+                                            <span
+                                                class="px-2 py-0.5 text-[10px] font-bold rounded-full <?= $material['is_paid'] ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
+                                                <?= $material['is_paid'] ? 'PAGO' : 'PENDENTE' ?>
+                                            </span>
+                                        </div>
+                                        <div class="text-sm font-bold text-gray-900 pr-8">
+                                            <?= htmlspecialchars($material['name']) ?>
+                                        </div>
+                                        <div class="flex justify-between items-end mt-2">
+                                            <div class="text-[10px] text-gray-400">
+                                                Tipo:
+                                                <?= htmlspecialchars($material['expense_type_name'] ?? 'Diversas') ?>
+                                            </div>
+                                            <div
+                                                class="text-sm font-black <?= $material['is_paid'] ? 'text-green-600' : 'text-red-500' ?>">
+                                                R$
+                                                <?= number_format($material['amount'], 2, ',', '.') ?>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mini Actions -->
+                                        <div
+                                            class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
+                                            <button onclick='editMaterial(<?= json_encode($material) ?>)'
+                                                class="p-1 text-primary hover:bg-primary/10 rounded">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                </svg>
+                                            </button>
+                                            <a href="<?= BASE_URL ?>/materials/delete/<?= $material['id'] ?><?= $work ? '?work_id=' . $work['id'] : '' ?>"
+                                                onclick="return confirm('Excluir esta despesa?')"
+                                                class="p-1 text-red-500 hover:bg-red-50 rounded">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -203,7 +203,8 @@
                             <select name="supplier_id" id="supplier_id" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
                                 <?php foreach ($suppliers as $supplier): ?>
-                                    <option value="<?= $supplier['id'] ?>"><?= htmlspecialchars($supplier['name']) ?>
+                                    <option value="<?= $supplier['id'] ?>">
+                                        <?= htmlspecialchars($supplier['name']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -218,7 +219,9 @@
                                 onchange="toggleNewExpenseType()"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
                                 <?php foreach ($expenseTypes as $type): ?>
-                                    <option value="<?= $type['id'] ?>"><?= htmlspecialchars($type['name']) ?></option>
+                                    <option value="<?= $type['id'] ?>">
+                                        <?= htmlspecialchars($type['name']) ?>
+                                    </option>
                                 <?php endforeach; ?>
                                 <option value="new">➕ Novo Tipo de Despesa</option>
                             </select>
@@ -261,6 +264,23 @@
 </div>
 
 <script>
+    function toggleSupplierItems(sId) {
+        const itemsDiv = document.getElementById(`supplier-items-${sId}`);
+        const toggleText = document.getElementById(`toggle-text-${sId}`);
+        const toggleIcon = document.getElementById(`toggle-icon-${sId}`);
+        const isHidden = itemsDiv.classList.contains('hidden');
+
+        if (isHidden) {
+            itemsDiv.classList.remove('hidden');
+            toggleText.innerText = 'Recolher Detalhes';
+            toggleIcon.style.transform = 'rotate(180deg)';
+        } else {
+            itemsDiv.classList.add('hidden');
+            toggleText.innerText = `Ver Detalhes (${itemsDiv.querySelectorAll('.bg-white').length})`;
+            toggleIcon.style.transform = 'rotate(0deg)';
+        }
+    }
+
     function toggleNewExpenseType() {
         const select = document.getElementById('expense_type_id');
         const container = document.getElementById('new_expense_type_container');
