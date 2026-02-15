@@ -92,7 +92,13 @@
             <div>
                 <span
                     class="block text-lg font-bold text-gray-900 group-hover:text-primary transition-colors">Materiais</span>
-                <span class="text-xs text-gray-500 italic">Despesas e compras</span>
+                <div class="flex items-center text-[11px] mt-0.5">
+                    <span class="text-green-600 font-semibold">R$
+                        <?= number_format($materialSummary['total_paid'] ?? 0, 2, ',', '.') ?></span>
+                    <span class="text-gray-300 mx-1.5">|</span>
+                    <span class="text-red-500 font-semibold">R$
+                        <?= number_format($materialSummary['total_pending'] ?? 0, 2, ',', '.') ?></span>
+                </div>
             </div>
         </a>
 
@@ -109,7 +115,13 @@
             <div>
                 <span
                     class="block text-lg font-bold text-gray-900 group-hover:text-primary transition-colors">Equipe</span>
-                <span class="text-xs text-gray-500 italic">Mão de obra e pagamentos</span>
+                <div class="flex items-center text-[11px] mt-0.5">
+                    <span class="text-green-600 font-semibold">R$
+                        <?= number_format($paymentSummary['total_paid'] ?? 0, 2, ',', '.') ?></span>
+                    <span class="text-gray-300 mx-1.5">|</span>
+                    <span class="text-red-500 font-semibold">R$
+                        <?= number_format($paymentSummary['total_pending'] ?? 0, 2, ',', '.') ?></span>
+                </div>
             </div>
         </a>
     </div>
