@@ -41,6 +41,15 @@
                     </svg>
                     Lançar Pagamento
                 </button>
+                <a href="<?= BASE_URL ?>/people/edit/<?= $person['id'] ?>"
+                    class="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg shadow-sm transition-colors duration-200 flex items-center text-sm font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    Editar Cadastro
+                </a>
             </div>
         </div>
     </div>

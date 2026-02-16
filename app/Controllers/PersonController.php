@@ -82,6 +82,62 @@ class PersonController
         require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
+    public function edit($id)
+    {
+        if (!AuthHelper::hasPermission('people', 'update')) {
+            die('Acesso negado. Você não tem permissão para editar pessoas.');
+        }
+        $personModel = new Person();
+        $person = $personModel->findById($id);
+
+        if (!$person) {
+            header('Location: ' . BASE_URL . '/people');
+            exit;
+        }
+
+        $roles = $personModel->getDistinctRoles();
+
+        require_once ROOT_PATH . '/app/Views/templates/header.php';
+        require_once ROOT_PATH . '/app/Views/people/edit.php';
+        require_once ROOT_PATH . '/app/Views/templates/footer.php';
+    }
+
+    public function update()
+    {
+        if (!AuthHelper::hasPermission('people', 'update')) {
+            die('Acesso negado. Você não tem permissão para atualizar pessoas.');
+        }
+        $personModel = new Person();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                'id' => $_POST['id'],
+                'name' => $_POST['name'],
+                'nickname' => $_POST['nickname'],
+                'phone' => $_POST['phone'],
+                'role' => $_POST['role'] === 'new' ? $_POST['new_role'] : $_POST['role'],
+                'service_type' => $_POST['service_type'],
+                'description' => $_POST['description']
+            ];
+
+            if ($personModel->update($data)) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Dados atualizados com sucesso!'
+                ];
+                header('Location: ' . BASE_URL . '/people/show/' . $data['id']);
+                exit;
+            } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'error',
+                    'message' => 'Erro ao atualizar dados.'
+                ];
+                header('Location: ' . BASE_URL . '/people/edit/' . $data['id']);
+                exit;
+            }
+        }
+    }
+
     public function show($id)
     {
         if (!AuthHelper::hasPermission('people', 'read')) {
