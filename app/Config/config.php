@@ -39,5 +39,16 @@ if (APP_ENV === 'development') {
 
 // Iniciar sessão se ainda não foi iniciada
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    // Carregar dependências necessárias para o manipulador de sessão
+    require_once __DIR__ . '/Database.php';
+    require_once __DIR__ . '/../Helpers/SessionHelper.php';
+
+    try {
+        $handler = new DatabaseSessionHandler();
+        session_set_save_handler($handler, true);
+        session_start();
+    } catch (Exception $e) {
+        // Fallback para sessão padrão em caso de erro no banco
+        session_start();
+    }
 }
