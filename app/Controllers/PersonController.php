@@ -18,8 +18,18 @@ class PersonController
         if (!AuthHelper::hasPermission('people', 'list')) {
             die('Acesso negado. Você não tem permissão para listar pessoas.');
         }
+
+        $work_id = $_GET['work_id'] ?? null;
         $personModel = new Person();
-        $people = $personModel->getAll();
+        $workModel = new Work();
+        $work = null;
+
+        if ($work_id) {
+            $people = $personModel->getByWork($work_id);
+            $work = $workModel->findById($work_id);
+        } else {
+            $people = $personModel->getAll();
+        }
 
         $paymentModel = new PersonPayment();
         $summaries = $paymentModel->getAllSummaries();

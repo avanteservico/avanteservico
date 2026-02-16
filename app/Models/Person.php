@@ -94,4 +94,20 @@ class Person
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    public function getByWork($work_id)
+    {
+        // Pessoas que têm pagamentos registrados para esta obra OU estão como responsáveis por tarefas desta obra
+        $query = "SELECT DISTINCT p.* FROM " . $this->table_name . " p
+                  LEFT JOIN person_payments pp ON p.id = pp.person_id
+                  LEFT JOIN tasks t ON p.id = t.responsible_id
+                  WHERE pp.work_id = :work_id OR t.work_id = :work_id2
+                  ORDER BY p.name ASC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':work_id', $work_id);
+        $stmt->bindParam(':work_id2', $work_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
