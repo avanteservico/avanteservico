@@ -39,6 +39,14 @@ class AdditiveController
         require_once ROOT_PATH . '/app/Views/templates/footer.php';
     }
 
+    private function parseCurrency($value)
+    {
+        $value = preg_replace('/[^0-9,.]/', '', $value);
+        $value = str_replace('.', '', $value);
+        $value = str_replace(',', '.', $value);
+        return (float) $value;
+    }
+
     public function create()
     {
         $work_id = $_POST['work_id'] ?? $_GET['work_id'] ?? null;
@@ -58,10 +66,16 @@ class AdditiveController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $additiveModel = new Additive();
 
+            $executed_percentage = $this->parseCurrency($_POST['executed_percentage'] ?? 0);
+            if ($executed_percentage > 100)
+                $executed_percentage = 100;
+
             $data = [
                 'work_id' => $work_id,
                 'name' => $_POST['name'],
-                'description' => $_POST['description'] ?? ''
+                'value' => $this->parseCurrency($_POST['value'] ?? 0),
+                'executed_percentage' => $executed_percentage,
+                'paid_value' => $this->parseCurrency($_POST['paid_value'] ?? 0),
             ];
 
             if ($additiveModel->create($data)) {
@@ -93,6 +107,8 @@ class AdditiveController
         $subAdditiveModel = new SubAdditive();
         $subAdditives = $subAdditiveModel->getAllByAdditiveId($id);
 
+        $additive['valor_devido'] = $additive['value'] * ($additive['executed_percentage'] / 100);
+
         require_once ROOT_PATH . '/app/Views/templates/header.php';
         require_once ROOT_PATH . '/app/Views/additives/edit.php';
         require_once ROOT_PATH . '/app/Views/templates/footer.php';
@@ -105,11 +121,16 @@ class AdditiveController
             $id = $_POST['id'];
             $work_id = $_POST['work_id'];
 
+            $executed_percentage = $this->parseCurrency($_POST['executed_percentage'] ?? 0);
+            if ($executed_percentage > 100)
+                $executed_percentage = 100;
+
             $data = [
                 'id' => $id,
                 'name' => $_POST['name'],
-                'description' => $_POST['description'] ?? '',
-                'status' => $_POST['status'] ?? 'pendente'
+                'value' => $this->parseCurrency($_POST['value'] ?? 0),
+                'executed_percentage' => $executed_percentage,
+                'paid_value' => $this->parseCurrency($_POST['paid_value'] ?? 0),
             ];
 
             if ($additiveModel->update($data)) {
@@ -145,7 +166,6 @@ class AdditiveController
             $data = [
                 'additive_id' => $additive_id,
                 'name' => $_POST['name'],
-                'description' => $_POST['description'] ?? ''
             ];
 
             $subAdditiveModel = new SubAdditive();
@@ -166,14 +186,11 @@ class AdditiveController
             $data = [
                 'id' => $id,
                 'name' => $_POST['name'],
-                'description' => $_POST['description'] ?? '',
                 'status' => $_POST['status'] ?? 'pendente'
             ];
 
             $subAdditiveModel = new SubAdditive();
             if ($subAdditiveModel->update($data)) {
-                $additiveModel = new Additive();
-                $additiveModel->recalculateStatus($additive_id);
                 header('Location: ' . BASE_URL . '/additives?work_id=' . $work_id);
                 exit;
             }
@@ -189,11 +206,7 @@ class AdditiveController
             $subAdditive = $subAdditiveModel->findById($id);
 
             if ($subAdditive) {
-                $additive_id = $subAdditive['additive_id'];
                 $subAdditiveModel->delete($id);
-
-                $additiveModel = new Additive();
-                $additiveModel->recalculateStatus($additive_id);
             }
         }
 

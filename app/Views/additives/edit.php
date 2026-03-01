@@ -23,35 +23,54 @@
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome do Aditivo *</label>
                 <input type="text" name="name" id="name" required
                     class="w-full rounded-lg border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50"
-                    placeholder="Ex: Acréscimo de Obra Civil..." value="<?= htmlspecialchars($additive['name']) ?>">
+                    value="<?= htmlspecialchars($additive['name']) ?>">
             </div>
 
-            <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descrição
-                    (opcional)</label>
-                <textarea name="description" id="description" rows="3"
-                    class="w-full rounded-lg border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50"
-                    placeholder="Descreva o motivo ou detalhes..."><?= htmlspecialchars($additive['description'] ?? '') ?></textarea>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="value" class="block text-sm font-medium text-gray-700 mb-1">Valor a Pagar (R$) *</label>
+                    <input type="text" name="value" id="value" required
+                        class="w-full rounded-lg border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 mask-money"
+                        placeholder="0,00" value="<?= number_format($additive['value'], 2, ',', '.') ?>"
+                        oninput="calculateDue()">
+                </div>
+                <div>
+                    <label for="executed_percentage" class="block text-sm font-medium text-gray-700 mb-1">%
+                        Executado</label>
+                    <input type="text" name="executed_percentage" id="executed_percentage"
+                        class="w-full rounded-lg border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 mask-percent"
+                        placeholder="0,00" value="<?= number_format($additive['executed_percentage'], 2, ',', '.') ?>"
+                        oninput="calculateDue()">
+                </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Valor Devido (R$)</label>
+                    <input type="text" id="valor_devido_display" readonly
+                        class="w-full rounded-lg border-gray-300 bg-gray-50 text-gray-500 cursor-not-allowed font-semibold"
+                        value="<?= number_format($additive['valor_devido'], 2, ',', '.') ?>">
+                    <p class="text-xs text-gray-400 mt-1">Calculado: % Executado × Valor a Pagar</p>
+                </div>
+                <div>
+                    <label for="paid_value" class="block text-sm font-medium text-gray-700 mb-1">Valor Recebido
+                        (R$)</label>
+                    <input type="text" name="paid_value" id="paid_value"
+                        class="w-full rounded-lg border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 mask-money"
+                        placeholder="0,00" value="<?= number_format($additive['paid_value'], 2, ',', '.') ?>">
+                </div>
+            </div>
+
+            <!-- Situação (calculada pelo % Executado) -->
             <div>
-                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Situação</label>
-                <?php if (!empty($subAdditives)): ?>
-                    <p class="text-xs text-teal-600 mb-1 italic">
-                        A situação é atualizada automaticamente com base nas subetapas.
-                    </p>
-                <?php endif; ?>
-                <select name="status" id="status"
-                    class="w-full rounded-lg border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 <?= !empty($subAdditives) ? 'bg-gray-50 text-gray-500 cursor-not-allowed' : '' ?>"
-                    <?= !empty($subAdditives) ? 'disabled' : '' ?>>
-                    <option value="pendente" <?= $additive['status'] == 'pendente' ? 'selected' : '' ?>>Pendente</option>
-                    <option value="finalizado" <?= $additive['status'] == 'finalizado' ? 'selected' : '' ?>>Finalizado
-                    </option>
-                </select>
-                <?php if (!empty($subAdditives)): ?>
-                    <!-- Campo oculto para enviar o valor mesmo com select disabled -->
-                    <input type="hidden" name="status" value="<?= htmlspecialchars($additive['status']) ?>">
-                <?php endif; ?>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Situação</label>
+                <div id="status_badge" class="mt-1">
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <?= $additive['status'] == 'finalizado' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' ?>">
+                        <?= ucfirst($additive['status']) ?>
+                    </span>
+                </div>
+                <p class="text-xs text-gray-400 mt-1">Definida automaticamente: 100% executado = Finalizado</p>
             </div>
 
             <!-- Subetapas existentes (visualização) -->
@@ -61,9 +80,7 @@
                     <ul class="space-y-1">
                         <?php foreach ($subAdditives as $sub): ?>
                             <li class="flex items-center justify-between text-sm text-gray-600 bg-gray-50 rounded px-3 py-2">
-                                <span>
-                                    <?= htmlspecialchars($sub['name']) ?>
-                                </span>
+                                <span><?= htmlspecialchars($sub['name']) ?></span>
                                 <span
                                     class="text-xs px-2 py-0.5 rounded font-medium <?= $sub['status'] == 'finalizado' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' ?>">
                                     <?= ucfirst($sub['status']) ?>
@@ -75,7 +92,7 @@
             <?php endif; ?>
 
             <div class="pt-4 flex items-center justify-between">
-                <!-- Botão Excluir (à esquerda) -->
+                <!-- Botão Excluir -->
                 <a href="<?= BASE_URL ?>/additives/delete/<?= $additive['id'] ?>"
                     onclick="return confirm('Excluir este aditivo e todas as suas subetapas?')"
                     class="px-4 py-2 border border-red-300 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 focus:outline-none">
@@ -94,3 +111,29 @@
         </form>
     </div>
 </div>
+
+<script>
+    let currentValue = <?= $additive['value'] ?>;
+
+    function calculateDue() {
+        const valueStr = document.getElementById('value').value;
+        const percentStr = document.getElementById('executed_percentage').value;
+
+        const value = parseFloat((valueStr || '0').replace(/\./g, '').replace(',', '.')) || 0;
+        const percent = parseFloat((percentStr || '0').replace(/\./g, '').replace(',', '.')) || 0;
+
+        const due = (value * percent) / 100;
+        document.getElementById('valor_devido_display').value = due.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        // Atualizar situação visualmente
+        const statusBadge = document.getElementById('status_badge');
+        if (percent >= 100) {
+            statusBadge.innerHTML = '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">Finalizado</span>';
+        } else {
+            statusBadge.innerHTML = '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">Pendente</span>';
+        }
+    }
+
+    document.getElementById('value').addEventListener('change', calculateDue);
+    document.getElementById('executed_percentage').addEventListener('change', calculateDue);
+</script>

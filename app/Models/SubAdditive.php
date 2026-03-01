@@ -32,9 +32,9 @@ class SubAdditive
     public function create($data)
     {
         $query = "INSERT INTO " . $this->table_name . "
-            (additive_id, name, description, status)
+            (additive_id, name, status)
             VALUES
-            (:additive_id, :name, :description, :status)";
+            (:additive_id, :name, :status)";
 
         $stmt = $this->conn->prepare($query);
 
@@ -42,7 +42,6 @@ class SubAdditive
 
         $stmt->bindParam(':additive_id', $data['additive_id']);
         $stmt->bindParam(':name', $data['name']);
-        $stmt->bindParam(':description', $data['description']);
         $stmt->bindParam(':status', $status);
 
         if ($stmt->execute()) {
@@ -54,13 +53,12 @@ class SubAdditive
     public function update($data)
     {
         $query = "UPDATE " . $this->table_name . "
-            SET name=:name, description=:description, status=:status
+            SET name=:name, status=:status
             WHERE id=:id";
 
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(':name', $data['name']);
-        $stmt->bindParam(':description', $data['description']);
         $stmt->bindParam(':status', $data['status']);
         $stmt->bindParam(':id', $data['id']);
 

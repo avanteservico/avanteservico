@@ -30,7 +30,7 @@
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <p class="text-sm text-teal-700">Os aditivos são registros documentais da obra e <strong>não impactam os valores
-                financeiros</strong>. Use para registrar acréscimos de escopo, alterações contratuais ou outras
+                financeiros da obra</strong>. Use para registrar acréscimos de escopo, alterações contratuais ou outras
             informações relevantes.</p>
     </div>
 
@@ -41,9 +41,15 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Etapa
-                            (Aditivo)</th>
-                        <th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                            Descrição</th>
+                        </th>
+                        <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Valor
+                            a Pagar</th>
+                        <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">%
+                            Executado</th>
+                        <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Valor
+                            Devido</th>
+                        <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Valor
+                            Recebido</th>
                         <th class="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">
                             Situação</th>
                         <th class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Ações
@@ -53,11 +59,18 @@
                 <?php if (empty($additives)): ?>
                     <tbody class="divide-y divide-gray-200">
                         <tr>
-                            <td colspan="4" class="px-4 py-12 text-center text-gray-500">Nenhum aditivo cadastrado.</td>
+                            <td colspan="7" class="px-4 py-12 text-center text-gray-500">Nenhum aditivo cadastrado.</td>
                         </tr>
                     </tbody>
                 <?php else: ?>
-                    <?php foreach ($additives as $additive): ?>
+                    <?php
+                    $totals = ['value' => 0, 'valor_devido' => 0, 'paid_value' => 0];
+                    foreach ($additives as $additive):
+                        $valor_devido = $additive['value'] * ($additive['executed_percentage'] / 100);
+                        $totals['value'] += $additive['value'];
+                        $totals['valor_devido'] += $valor_devido;
+                        $totals['paid_value'] += $additive['paid_value'];
+                        ?>
                         <tbody x-data="{ open: false }" class="divide-y divide-gray-100 border-b border-gray-100">
                             <!-- Linha do Aditivo Principal -->
                             <tr class="bg-white hover:bg-gray-50 transition-colors">
@@ -72,13 +85,20 @@
                                                     d="M9 5l7 7-7 7" />
                                             </svg>
                                         </button>
-                                        <span class="font-bold text-gray-900">
-                                            <?= htmlspecialchars($additive['name']) ?>
-                                        </span>
+                                        <span class="font-bold text-gray-900"><?= htmlspecialchars($additive['name']) ?></span>
                                     </div>
                                 </td>
-                                <td class="px-4 py-4 text-sm text-gray-600 max-w-xs truncate">
-                                    <?= htmlspecialchars($additive['description'] ?? '-') ?>
+                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-gray-900 font-medium">
+                                    R$ <?= number_format($additive['value'], 2, ',', '.') ?>
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-gray-600">
+                                    <?= number_format($additive['executed_percentage'], 2, ',', '.') ?>%
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-blue-600 font-bold">
+                                    R$ <?= number_format($valor_devido, 2, ',', '.') ?>
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-green-600 font-bold">
+                                    R$ <?= number_format($additive['paid_value'], 2, ',', '.') ?>
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center">
                                     <span
@@ -117,16 +137,12 @@
                             <!-- Subetapas (accordion) -->
                             <?php foreach ($additive['sub_additives'] as $sub): ?>
                                 <tr x-show="open" class="bg-gray-50 bg-opacity-50 hover:bg-gray-100 transition-colors">
-                                    <td class="px-4 py-2 pl-10 whitespace-nowrap">
+                                    <td class="px-4 py-2 pl-10 whitespace-nowrap" colspan="5">
                                         <div class="flex items-center">
                                             <div class="w-2 h-2 rounded-full bg-teal-300 mr-2"></div>
-                                            <span class="text-xs text-gray-600 font-medium">
-                                                <?= htmlspecialchars($sub['name']) ?>
-                                            </span>
+                                            <span
+                                                class="text-xs text-gray-600 font-medium"><?= htmlspecialchars($sub['name']) ?></span>
                                         </div>
-                                    </td>
-                                    <td class="px-4 py-2 text-xs text-gray-500">
-                                        <?= htmlspecialchars($sub['description'] ?? '-') ?>
                                     </td>
                                     <td class="px-4 py-2 text-center">
                                         <span
@@ -177,18 +193,10 @@
                                                 <p class="text-sm text-gray-500 mb-4">Para:
                                                     <?= htmlspecialchars($additive['name']) ?>
                                                 </p>
-                                                <div class="space-y-4">
-                                                    <div>
-                                                        <label class="block text-sm font-medium text-gray-700">Nome</label>
-                                                        <input type="text" name="name" required
-                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
-                                                    </div>
-                                                    <div>
-                                                        <label class="block text-sm font-medium text-gray-700">Descrição
-                                                            (opcional)</label>
-                                                        <textarea name="description" rows="2"
-                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50"></textarea>
-                                                    </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700">Nome</label>
+                                                    <input type="text" name="name" required
+                                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
                                                 </div>
                                             </div>
                                             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -204,6 +212,25 @@
                             </div>
                         </tbody>
                     <?php endforeach; ?>
+
+                    <!-- Linha de Totais -->
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="bg-gray-100 font-bold">
+                            <td class="px-4 py-4 whitespace-nowrap text-gray-900 text-sm">TOTAIS</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-gray-900">
+                                R$ <?= number_format($totals['value'], 2, ',', '.') ?>
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-gray-500">-</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-blue-700">
+                                R$ <?= number_format($totals['valor_devido'], 2, ',', '.') ?>
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-green-700">
+                                R$ <?= number_format($totals['paid_value'], 2, ',', '.') ?>
+                            </td>
+                            <td class="px-4 py-4"></td>
+                            <td class="px-4 py-4"></td>
+                        </tr>
+                    </tbody>
                 <?php endif; ?>
             </table>
         </div>
@@ -232,11 +259,6 @@
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Descrição (opcional)</label>
-                            <textarea name="description" id="edit-sub-description" rows="2"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50"></textarea>
-                        </div>
-                        <div>
                             <label class="block text-sm font-medium text-gray-700">Situação</label>
                             <select name="status" id="edit-sub-status"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
@@ -263,7 +285,6 @@
         document.getElementById('edit-sub-id').value = sub.id;
         document.getElementById('edit-sub-additive-id').value = sub.additive_id;
         document.getElementById('edit-sub-name').value = sub.name;
-        document.getElementById('edit-sub-description').value = sub.description || '';
         document.getElementById('edit-sub-status').value = sub.status;
         document.getElementById('modal-edit-sub').classList.remove('hidden');
     }
