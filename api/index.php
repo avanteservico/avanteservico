@@ -95,7 +95,8 @@ $routes = [
     'revenues' => 'RevenueController',
     'sub_services' => 'ServiceController',
     'financial' => 'FinancialController',
-    'suppliers' => 'SupplierController'
+    'suppliers' => 'SupplierController',
+    'additives' => 'AdditiveController'
 ];
 
 // Determinar o nome do Controller

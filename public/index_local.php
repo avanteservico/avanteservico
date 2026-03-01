@@ -51,7 +51,8 @@ $routes = [
     'sub_services' => 'ServiceController', // Talvez precise de controller próprio ou não
     'setup' => 'AuthController', // Opcional
     'financial' => 'FinancialController',
-    'suppliers' => 'SupplierController'
+    'suppliers' => 'SupplierController',
+    'additives' => 'AdditiveController'
 ];
 
 // Determinar o nome do Controller
